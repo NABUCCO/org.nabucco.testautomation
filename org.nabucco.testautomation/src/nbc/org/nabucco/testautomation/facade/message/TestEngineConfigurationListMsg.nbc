@@ -1,0 +1,18 @@
+/*
+*  PRODYNA NABUCCO
+*  Copyright 2010, PRODYNA AG
+*/
+package org.nabucco.testautomation.facade.message;
+
+import org.nabucco.testautomation.facade.datatype.engine.TestEngineConfiguration;
+
+@Author			Steffen Schmidt
+@Company		PRODYNA AG
+@Date			2010-06-25
+@Version		1.0
+@Description	Message containing a list of TestEngineConfigurations
+public Message TestEngineConfigurationListMsg {
+
+	private Datatype TestEngineConfiguration[0..*] configurationList;
+
+}

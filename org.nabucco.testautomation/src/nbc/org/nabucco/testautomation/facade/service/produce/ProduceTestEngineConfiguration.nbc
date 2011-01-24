@@ -1,0 +1,38 @@
+/*
+ *	PRODYNA NABUCCO
+ *  Copyright 2010, PRODYNA AG
+ */
+package org.nabucco.testautomation.facade.service.produce;
+
+import org.nabucco.framework.base.facade.exception.service.ProduceException;
+import org.nabucco.testautomation.facade.message.TestEngineConfigurationMsg;
+import org.nabucco.testautomation.facade.message.ProxyConfigurationMsg;
+import org.nabucco.testautomation.facade.message.ConfigurationPropertyMsg;
+
+
+@Author				Steffen Schmidt
+@Company			PRODYNA AG
+@Date				2010-04-19
+@Version			1.0
+@Description		TestEngineConfiguration produce service
+public Service ProduceTestEngineConfiguration {
+	
+	@ManualImplementation
+	public TestEngineConfigurationMsg produceTestEngineConfiguration() throws ProduceException;
+
+	@ManualImplementation
+	public TestEngineConfigurationMsg produceProxyConfiguration() throws ProduceException;
+
+	@ManualImplementation
+	public TestEngineConfigurationMsg produceConfigurationProperty() throws ProduceException;
+	
+	@ManualImplementation
+	public TestEngineConfigurationMsg produceTestEngineConfigurationClone(TestEngineConfigurationMsg msg) throws ProduceException;
+
+	@ManualImplementation
+	public ProxyConfigurationMsg produceProxyConfigurationClone(ProxyConfigurationMsg msg) throws ProduceException;
+
+	@ManualImplementation
+	public ConfigurationPropertyMsg produceConfigurationPropertyClone(ConfigurationPropertyMsg msg) throws ProduceException;
+	
+}

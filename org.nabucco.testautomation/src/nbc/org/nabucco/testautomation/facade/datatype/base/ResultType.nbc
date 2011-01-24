@@ -1,0 +1,25 @@
+/*
+ *  PRODYNA NABUCCO
+ *  Copyright 2010, PRODYNA AG
+ */
+package org.nabucco.testautomation.facade.datatype.base;
+
+@Author			Steffen Schmidt
+@Company		PRODYNA AG
+@Date			2010-04-07
+@Description	Enumeration for all possible result types.
+public Enumeration ResultType {
+
+    @LiteralId	"P"
+    @Description The TestStep passed with no errors.
+    PASSED
+    
+    @LiteralId	"F"
+    @Description The TestStep failed due to the failure of at least one TestScript.
+    FAILED
+    
+    @LiteralId	"S"
+    @Description The TestStep was skipped.
+    SKIPPED
+    
+}

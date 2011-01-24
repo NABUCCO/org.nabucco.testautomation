@@ -1,0 +1,37 @@
+/*
+ *	PRODYNA NABUCCO
+ *  Copyright 2010, PRODYNA AG
+ */
+package org.nabucco.testautomation.facade.service.search;
+
+import org.nabucco.framework.base.facade.exception.service.SearchException;
+import org.nabucco.testautomation.facade.message.TestEngineConfigurationSearchMsg;
+import org.nabucco.testautomation.facade.message.TestEngineConfigurationMsg;
+import org.nabucco.testautomation.facade.message.TestEngineConfigurationListMsg;
+import org.nabucco.testautomation.facade.message.ProxyConfigurationMsg;
+import org.nabucco.testautomation.facade.message.ProxyConfigurationListMsg;
+import org.nabucco.testautomation.facade.message.ProxyConfigurationSearchMsg;
+
+@Author				Steffen Schmidt
+@Company			PRODYNA AG
+@Date				2010-04-19
+@Version			1.0
+@Description		Property search service
+public Service SearchTestEngineConfiguration {
+	
+	@Inject
+	private EntityManager[1] em;
+
+	@ManualImplementation
+	public TestEngineConfigurationListMsg searchTestEngineConfiguration(TestEngineConfigurationSearchMsg configSearchMsg) throws SearchException;
+
+	@ManualImplementation
+	public TestEngineConfigurationMsg getTestEngineConfiguration(TestEngineConfigurationSearchMsg configSearchMsg) throws SearchException;
+	
+	@ManualImplementation
+	public ProxyConfigurationListMsg searchProxyConfiguration() throws SearchException;
+
+	@ManualImplementation
+	public ProxyConfigurationMsg getProxyConfiguration(ProxyConfigurationSearchMsg proxyConfigurationSearchMsg) throws SearchException;
+	
+}

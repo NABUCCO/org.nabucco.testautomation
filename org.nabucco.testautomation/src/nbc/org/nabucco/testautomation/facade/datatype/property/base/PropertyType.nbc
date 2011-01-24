@@ -1,0 +1,61 @@
+/*
+ *  PRODYNA NABUCCO
+ *  Copyright 2010, PRODYNA AG
+ */
+package org.nabucco.testautomation.facade.datatype.property.base;
+
+@Author			Steffen Schmidt
+@Company		PRODYNA AG
+@Date			2010-04-01
+@Description	Enumeration for possible property types.
+public Enumeration PropertyType {
+
+	@LiteralId	"BO"
+    @Description A Property containing a value of type {@link Boolean}.
+    BOOLEAN
+
+    @LiteralId	"ST"
+    @Description Property containing a value of type {@link String}.
+    STRING
+
+    @LiteralId	"DT"
+    @Description Property containing a value of type {@link Date}.
+    DATE
+
+    @LiteralId	"LO"
+    @Description A Property containing a value of type {@link Long}.
+    LONG
+
+    @LiteralId	"IN"
+    @Description A Property containing a value of type {@link Integer}.
+    INTEGER
+
+    @LiteralId	"MP"
+    @Description A Property containing properties stored in a {@link Map}.
+    MAP
+
+    @LiteralId	"XM"
+    @Description A Property containing a value of type string containing xml.
+    XML
+
+    @LiteralId	"XP"
+    @Description A Property containing a value of type string containg a xpath-expression.
+    XPATH
+
+    @LiteralId	"LI"
+    @Description A Property containing properties stored in a {@link List}.
+    LIST
+    
+    @LiteralId	"DO"
+    @Description A Property containing a value of type {@link Double}.
+    DOUBLE
+    
+    @LiteralId	"TF"
+    @Description A Property containing the content of a file.
+    FILE
+
+    @LiteralId	"SQ"
+    @Description A Property containing a value of type string containing sql.
+    SQL
+
+}

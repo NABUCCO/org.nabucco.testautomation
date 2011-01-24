@@ -1,0 +1,25 @@
+/*
+*  PRODYNA NABUCCO
+*  Copyright 2010, PRODYNA AG
+*/
+package org.nabucco.testautomation.facade.datatype.property;
+
+import org.nabucco.testautomation.facade.datatype.base.XmlValue;
+import org.nabucco.testautomation.facade.datatype.property.base.PropertyComponent;
+import org.nabucco.testautomation.facade.datatype.property.base.PropertyType;
+
+@Author			Steffen Schmidt
+@Company		PRODYNA AG
+@Date			2010-04-01
+@Version		1.0
+@Description	Property containing XML as value
+public Datatype XmlProperty extends PropertyComponent {
+
+	@Mandatory
+	@MaxLength 1000000
+	private Basetype XmlValue[1] value;
+	
+	@Redefined
+	@Default XML
+	protected Enumeration PropertyType[1] type;
+}

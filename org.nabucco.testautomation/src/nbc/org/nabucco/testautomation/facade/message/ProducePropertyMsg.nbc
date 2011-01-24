@@ -1,0 +1,24 @@
+/*
+*  PRODYNA NABUCCO
+*  Copyright 2010, PRODYNA AG
+*/
+package org.nabucco.testautomation.facade.message;
+
+import org.nabucco.framework.base.facade.datatype.Name;
+import org.nabucco.testautomation.facade.datatype.base.Value;
+import org.nabucco.testautomation.facade.datatype.property.base.PropertyType;
+
+@Author			Steffen Schmidt
+@Company		PRODYNA AG
+@Date			2010-04-20
+@Version		1.0
+@Description	Message for producing a Property of a certain PropertyType
+public Message ProducePropertyMsg {
+
+	private Enumeration PropertyType[1] propertyType;
+	
+	private Basetype Name[0..1] name;
+	
+	private Basetype Value[0..1] value;
+
+}

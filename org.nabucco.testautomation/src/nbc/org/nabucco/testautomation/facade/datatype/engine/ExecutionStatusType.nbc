@@ -1,0 +1,37 @@
+/*
+ *  PRODYNA NABUCCO
+ *  Copyright 2010, PRODYNA AG
+ */
+package org.nabucco.testautomation.facade.datatype.engine;
+
+@Author			Steffen Schmidt
+@Company		PRODYNA AG
+@Date			2010-06-25
+@Description	Enumeration for all possible SubEngine types.
+public Enumeration ExecutionStatusType {
+
+    @LiteralId	"IN"
+    @Description The TestRunnerJob is initialized and ready for execution.
+    INITIALIZED
+    
+    @LiteralId	"RU"
+    @Description The TestRunnerJob is started by the ExecutionService and is still running.
+    RUNNING
+    
+    @LiteralId	"FI"
+    @Description The Job has finished the execution. 
+    FINISHED
+    
+    @LiteralId	"RE"
+    @Description The Job has been rejected and was not executed.
+    REJECTED
+    
+    @LiteralId	"PA"
+    @Description The Job is paused and waiting for resume.
+    PAUSED
+    
+    @LiteralId	"IR"
+    @Description The Job was interrupted.
+    INTERRUPTED
+    
+}

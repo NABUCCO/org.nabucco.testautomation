@@ -1,0 +1,17 @@
+/*
+*  PRODYNA NABUCCO
+*  Copyright 2010, PRODYNA AG
+*/
+package org.nabucco.testautomation.ui.command.engine;
+
+@Author			Markus Jorroch
+@Company		PRODYNA AG
+@Date			2010-06-29
+@Description	This command is for saving/updating/removing a TestEngineConfiguration
+@Id				org.nabucco.testautomation.ui.command.engine.MaintainTestEngineConfigurationCommand
+public Command MaintainTestEngineConfigurationCommand {
+
+	@ManualImplementation
+	public void maintainTestEngineConfigurationCommand();
+
+}

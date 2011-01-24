@@ -1,0 +1,21 @@
+/*
+*  PRODYNA NABUCCO
+*  Copyright 2010, PRODYNA AG
+*/
+package org.nabucco.testautomation.facade.message;
+
+import org.nabucco.testautomation.facade.datatype.property.base.Property;
+import org.nabucco.testautomation.facade.datatype.property.base.PropertyContainer;
+
+@Author			Steffen Schmidt
+@Company		PRODYNA AG
+@Date			2010-04-19
+@Version		1.0
+@Description	Message for persisting a Property
+public Message PropertyMsg {
+
+	private Datatype Property[1] property;
+
+	private Datatype PropertyContainer[1] propertyContainer;
+
+}

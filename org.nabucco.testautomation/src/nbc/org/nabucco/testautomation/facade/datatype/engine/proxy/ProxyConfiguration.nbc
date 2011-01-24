@@ -1,0 +1,34 @@
+/*
+*  PRODYNA NABUCCO
+*  Copyright 2010, PRODYNA AG
+*/
+package org.nabucco.testautomation.facade.datatype.engine.proxy;
+
+import org.nabucco.framework.base.facade.datatype.NabuccoDatatype;
+import org.nabucco.framework.base.facade.datatype.Name;
+import org.nabucco.framework.base.facade.datatype.code.Code;
+import org.nabucco.testautomation.facade.datatype.engine.SubEngineType;
+import org.nabucco.testautomation.facade.datatype.engine.proxy.ConfigurationProperty;
+
+@Author			Steffen Schmidt
+@Company		PRODYNA AG
+@Date			2010-09-10
+@Version		1.0
+@Description	Wrapper containing the configuration for a TestEngine-Proxy
+public Datatype ProxyConfiguration extends NabuccoDatatype {
+
+	private Basetype Name[1] name;
+
+	private Enumeration SubEngineType[1] subEngineType;
+	
+	@Description		Environment of the TestConfiguration
+	@CodePath nabucco.testautomation.environment
+	private Datatype Code[0..1] environmentType;
+
+	@Description		Release of the TestConfiguration
+	@CodePath nabucco.testautomation.release
+	private Datatype Code[0..1] releaseType;
+
+	private Datatype ConfigurationProperty[0..*] configurationProperties;
+
+}

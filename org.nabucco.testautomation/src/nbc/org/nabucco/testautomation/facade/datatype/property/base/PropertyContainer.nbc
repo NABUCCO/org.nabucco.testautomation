@@ -1,0 +1,24 @@
+/*
+ *  PRODYNA NABUCCO
+ *  Copyright 2010, PRODYNA AG
+ */
+package org.nabucco.testautomation.facade.datatype.property.base;
+
+import org.nabucco.framework.base.facade.datatype.NabuccoDatatype;
+import org.nabucco.framework.base.facade.datatype.Order;
+import org.nabucco.testautomation.facade.datatype.property.base.Property;
+
+@Author         sschmidt
+@Company        PRODYNA AG
+@Date           2010-10-05
+@Version        1.0
+@Description    Container holding a Property and its order position
+public Datatype PropertyContainer extends NabuccoDatatype {
+
+	@FetchStrategy			EAGER
+	@AssociationStrategy	AGGREGATION
+	private Datatype Property[1] property;
+	
+	private Basetype Order[0..1] orderIndex;
+
+}

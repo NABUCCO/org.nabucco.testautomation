@@ -1,0 +1,27 @@
+/*
+*  PRODYNA NABUCCO
+*  Copyright 2010, PRODYNA AG
+*/
+package org.nabucco.testautomation.facade.datatype.property;
+
+import org.nabucco.framework.base.facade.datatype.Flag;
+import org.nabucco.testautomation.facade.datatype.property.base.PropertyComposite;
+import org.nabucco.testautomation.facade.datatype.property.base.PropertyType;
+import org.nabucco.testautomation.facade.datatype.property.base.PropertyUsageType;
+
+@Author			Steffen Schmidt
+@Company		PRODYNA AG
+@Date			2010-04-01
+@Version		1.0
+@Description	CompositeProperty container a list of properties 
+public Datatype PropertyList extends PropertyComposite {
+
+	@Redefined
+	@Default LIST
+	protected Enumeration PropertyType[1] type;
+	
+	private Basetype Flag[1] reused;
+	
+	private Enumeration PropertyUsageType[0..1] usageType;
+	
+}

@@ -1,0 +1,24 @@
+/*
+*  PRODYNA NABUCCO
+*  Copyright 2010, PRODYNA AG
+*/
+package org.nabucco.testautomation.facade.datatype.property;
+
+import org.nabucco.testautomation.facade.datatype.base.XPathValue;
+import org.nabucco.testautomation.facade.datatype.property.base.PropertyComposite;
+import org.nabucco.testautomation.facade.datatype.property.base.PropertyType;
+
+@Author			Steffen Schmidt
+@Company		PRODYNA AG
+@Date			2010-04-01
+@Version		1.0
+@Description	CompositeProperty containing an xpath-expression and relative child-expressions 
+public Datatype XPathProperty extends PropertyComposite {
+
+	@Mandatory
+	private Basetype XPathValue[1] value;
+	
+	@Redefined
+	@Default XPATH
+	protected Enumeration PropertyType[1] type;
+}

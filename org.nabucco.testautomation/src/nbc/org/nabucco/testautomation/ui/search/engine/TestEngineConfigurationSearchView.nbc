@@ -1,0 +1,38 @@
+/*
+*  PRODYNA NABUCCO
+*  Copyright 2010, PRODYNA AG
+*/
+package org.nabucco.testautomation.ui.search.engine;
+
+import org.nabucco.testautomation.facade.datatype.engine.TestEngineConfiguration;
+
+@Author			Steffen Schmidt
+@Company		PRODYNA6 AG
+@Date			2010-06-30
+@Description	Search view for TestEngineConfiguration
+@Id				org.nabucco.testautomation.ui.search.engine.TestEngineConfigurationSearchView
+public SearchView TestEngineConfigurationSearchView {
+
+	private Datatype TestEngineConfiguration[1] config;
+	
+	@MappedField 		config.name
+	@FieldLabelId		config.name
+	@FieldLabelDefault 	"Name"
+	private LabeledInputField configName;
+	
+	@MappedField 		config.host
+	@FieldLabelId		config.host
+	@FieldLabelDefault 	"Host"
+	private LabeledInputField configHost;
+	
+	@MappedField 		config.port
+	@FieldLabelId		config.port
+	@FieldLabelDefault 	"Port"
+	private LabeledInputField configPort;
+	
+	@MappedField 		config.remoteReferenceName
+	@FieldLabelId		config.remoteReferenceName
+	@FieldLabelDefault 	"RemoteReferenceName"
+	private LabeledInputField configRemoteReferenceName;
+	
+}

@@ -1,0 +1,18 @@
+/*
+*  PRODYNA NABUCCO
+*  Copyright 2010, PRODYNA AG
+*/
+package org.nabucco.testautomation.facade.message;
+
+import org.nabucco.testautomation.facade.datatype.property.base.Property;
+
+@Author			Steffen Schmidt
+@Company		PRODYNA AG
+@Date			2010-04-19
+@Version		1.0
+@Description	Message containing a list of Properties
+public Message PropertyListMsg {
+
+	private Datatype Property[0..*] propertyList;
+
+}

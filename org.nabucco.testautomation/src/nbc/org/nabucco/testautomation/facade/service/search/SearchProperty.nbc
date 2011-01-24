@@ -1,0 +1,24 @@
+/*
+ *	PRODYNA NABUCCO
+ *  Copyright 2010, PRODYNA AG
+ */
+package org.nabucco.testautomation.facade.service.search;
+
+import org.nabucco.framework.base.facade.exception.service.SearchException;
+import org.nabucco.testautomation.facade.message.PropertySearchMsg;
+import org.nabucco.testautomation.facade.message.PropertyListMsg;
+
+@Author				Steffen Schmidt
+@Company			PRODYNA AG
+@Date				2010-04-19
+@Version			1.0
+@Description		Property search service
+public Service SearchProperty {
+	
+	@Inject
+	private EntityManager[1] em;
+
+	@ManualImplementation
+	public PropertyListMsg searchProperty(PropertySearchMsg propertySearchMsg) throws SearchException;
+	
+}

@@ -1,0 +1,24 @@
+/*
+*  PRODYNA NABUCCO
+*  Copyright 2010, PRODYNA AG
+*/
+package org.nabucco.testautomation.facade.message;
+
+import org.nabucco.testautomation.facade.datatype.engine.TestEngineConfiguration;
+import org.nabucco.testautomation.facade.datatype.engine.proxy.ProxyConfiguration;
+import org.nabucco.testautomation.facade.datatype.engine.proxy.ConfigurationProperty;
+
+@Author			Steffen Schmidt
+@Company		PRODYNA AG
+@Date			2010-06-25
+@Version		1.0
+@Description	Message for persisting a TestEngineConfiguration
+public Message TestEngineConfigurationMsg {
+
+	private Datatype TestEngineConfiguration[1] testEngineConfiguration;
+
+	private Datatype ProxyConfiguration[1] proxyConfiguration;
+
+	private Datatype ConfigurationProperty[1] configurationProperty;
+
+}

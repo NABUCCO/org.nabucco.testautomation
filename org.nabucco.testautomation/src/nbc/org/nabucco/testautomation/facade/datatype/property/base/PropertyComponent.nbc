@@ -1,0 +1,16 @@
+/*
+*  PRODYNA NABUCCO
+*  Copyright 2010, PRODYNA AG
+*/
+package org.nabucco.testautomation.facade.datatype.property.base;
+
+import org.nabucco.testautomation.facade.datatype.property.base.Property;
+
+@Author			Steffen Schmidt
+@Company		PRODYNA AG
+@Date			2010-04-01
+@Version		1.0
+@Description	Abstract superclass for all leafs
+public abstract Datatype PropertyComponent extends Property {
+
+}

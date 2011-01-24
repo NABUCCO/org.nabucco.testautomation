@@ -1,0 +1,14 @@
+/*
+ *	PRODYNA NABUCCO
+ *  Copyright 2010, PRODYNA AG
+ */
+package org.nabucco.testautomation.facade.datatype.base;
+
+@Author			Steffen Schmidt
+@Company		PRODYNA AG
+@Date			2010-04-06
+@Description	Basic datatype for long values
+public Basetype DoubleValue extends NDouble {
+
+
+}

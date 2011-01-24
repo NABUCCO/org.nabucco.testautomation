@@ -1,0 +1,35 @@
+/*
+*  PRODYNA NABUCCO
+*  Copyright 2010, PRODYNA AG
+*/
+package org.nabucco.testautomation.facade.message;
+
+import org.nabucco.framework.base.facade.datatype.Identifier;
+import org.nabucco.framework.base.facade.datatype.Name;
+import org.nabucco.framework.base.facade.datatype.code.Code;
+import org.nabucco.framework.base.facade.datatype.security.User;
+
+@Author			Steffen Schmidt
+@Company		PRODYNA AG
+@Date			2010-04-19
+@Version		1.0
+@Description	Message for searching Properties
+public Message TestEngineConfigurationSearchMsg {
+
+	private Basetype Name[0..1] name;
+	
+	private Basetype Name[0..1] host;
+	
+	private Basetype Name[0..1] port;
+	
+	private Basetype Name[0..1] remoteRefName;
+	
+	private Basetype Identifier[0..1] id;
+	
+	private Datatype User[0..1] user;
+	
+	private Datatype Code[0..1] environmentType;
+	
+	private Datatype Code[0..1] releaseType;
+	
+}

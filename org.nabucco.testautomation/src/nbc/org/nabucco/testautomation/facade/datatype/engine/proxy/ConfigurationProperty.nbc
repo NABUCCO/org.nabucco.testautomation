@@ -1,0 +1,22 @@
+/*
+*  PRODYNA NABUCCO
+*  Copyright 2010, PRODYNA AG
+*/
+package org.nabucco.testautomation.facade.datatype.engine.proxy;
+
+import org.nabucco.framework.base.facade.datatype.NabuccoDatatype;
+import org.nabucco.framework.base.facade.datatype.Name;
+import org.nabucco.testautomation.facade.datatype.base.StringValue;
+
+@Author			Steffen Schmidt
+@Company		PRODYNA AG
+@Date			2010-09-10
+@Version		1.0
+@Description	One configuration property consiting of a key and a value
+public Datatype ConfigurationProperty extends NabuccoDatatype {
+
+	private Basetype Name[1] name;
+
+	private Basetype StringValue[1] value;
+
+}

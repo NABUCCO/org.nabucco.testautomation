@@ -1,0 +1,89 @@
+/*
+ *	PRODYNA NABUCCO
+ *  Copyright 2010, PRODYNA AG
+ */
+package org.nabucco.testautomation.facade.component;
+
+import org.nabucco.testautomation.facade.datatype.engine.TestEngineConfiguration;
+import org.nabucco.framework.common.authorization.facade.component.AuthorizationComponent;
+import org.nabucco.testautomation.facade.datatype.engine.proxy.ProxyConfiguration;
+import org.nabucco.testautomation.facade.datatype.engine.proxy.ConfigurationProperty;
+import org.nabucco.testautomation.facade.datatype.property.base.Property;
+import org.nabucco.testautomation.facade.datatype.property.base.PropertyComposite;
+import org.nabucco.testautomation.facade.datatype.property.base.PropertyContainer;
+import org.nabucco.testautomation.facade.datatype.property.BooleanProperty;
+import org.nabucco.testautomation.facade.datatype.property.DateProperty;
+import org.nabucco.testautomation.facade.datatype.property.DoubleProperty;
+import org.nabucco.testautomation.facade.datatype.property.IntegerProperty;
+import org.nabucco.testautomation.facade.datatype.property.LongProperty;
+import org.nabucco.testautomation.facade.datatype.property.StringProperty;
+import org.nabucco.testautomation.facade.datatype.property.XmlProperty;
+import org.nabucco.testautomation.facade.datatype.property.XPathProperty;
+import org.nabucco.testautomation.facade.datatype.property.FileProperty;
+import org.nabucco.testautomation.facade.datatype.property.SqlProperty;
+import org.nabucco.testautomation.facade.datatype.property.PropertyList;
+import org.nabucco.testautomation.facade.service.maintain.MaintainProperty;
+import org.nabucco.testautomation.facade.service.produce.ProduceProperty;
+import org.nabucco.testautomation.facade.service.search.SearchProperty;
+import org.nabucco.testautomation.facade.service.maintain.MaintainTestEngineConfiguration;
+import org.nabucco.testautomation.facade.service.produce.ProduceTestEngineConfiguration;
+import org.nabucco.testautomation.facade.service.search.SearchTestEngineConfiguration;
+
+@Author			Steffen Schmidt
+@Company		PRODYNA AG
+@Date			2010-04-09
+@Version		1.0
+@Description	BaseComponent for Testautomation
+@ComponentPrefix test
+public Component TestautomationComponent {
+
+	public Component AuthorizationComponent authorization;
+	
+	private persistent Datatype Property[1] property;
+
+	private persistent Datatype PropertyComposite[1] property;
+
+	private persistent Datatype PropertyContainer[1] property;
+
+	private persistent Datatype BooleanProperty[1] booleanProperty;
+
+	private persistent Datatype DateProperty[1] dateProperty;
+	
+	private persistent Datatype DoubleProperty[1] doubleProperty;
+	
+	private persistent Datatype IntegerProperty[1] integerProperty;
+	
+	private persistent Datatype LongProperty[1] longProperty;
+	
+	private persistent Datatype StringProperty[1] stringProperty;
+	
+	private persistent Datatype XmlProperty[1] xmlProperty;
+	
+	private persistent Datatype XPathProperty[1] xpathProperty;
+
+	private persistent Datatype FileProperty[1] fileProperty;
+
+	private persistent Datatype SqlProperty[1] sqlProperty;
+	
+	private persistent Datatype PropertyList[1] propertyList;
+
+	private persistent Datatype TestEngineConfiguration[1] testEngineConfiguration;
+
+	private persistent Datatype ProxyConfiguration[1] proxyConfiguration;
+
+	private persistent Datatype ConfigurationProperty[1] configurationProperty;
+	
+	public Service MaintainProperty;
+	
+	public Service ProduceProperty;
+	
+	public Service SearchProperty;
+	
+	public Service MaintainTestEngineConfiguration;
+	
+	public Service ProduceTestEngineConfiguration;
+	
+	public Service SearchTestEngineConfiguration;
+
+
+}

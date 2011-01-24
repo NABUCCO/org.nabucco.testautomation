@@ -1,0 +1,25 @@
+/*
+*  PRODYNA NABUCCO
+*  Copyright 2010, PRODYNA AG
+*/
+package org.nabucco.testautomation.facade.datatype.property;
+
+import org.nabucco.testautomation.facade.datatype.base.BooleanValue;
+import org.nabucco.testautomation.facade.datatype.property.base.PropertyComponent;
+import org.nabucco.testautomation.facade.datatype.property.base.PropertyType;
+
+@Author			Steffen Schmidt
+@Company		PRODYNA AG
+@Date			2010-04-01
+@Version		1.0
+@Description	Property containing a Boolean as value
+public Datatype BooleanProperty extends PropertyComponent {
+
+	@Mandatory
+	private Basetype BooleanValue[1] value;
+	
+	@Redefined
+	@Default BOOLEAN
+	protected Enumeration PropertyType[1] type;
+
+}

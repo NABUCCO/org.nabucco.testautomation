@@ -1,0 +1,25 @@
+/*
+ *	PRODYNA NABUCCO
+ *  Copyright 2010, PRODYNA AG
+ */
+package org.nabucco.testautomation.facade.service.produce;
+
+import org.nabucco.framework.base.facade.exception.service.ProduceException;
+import org.nabucco.testautomation.facade.message.PropertyMsg;
+import org.nabucco.testautomation.facade.message.ProducePropertyMsg;
+
+
+@Author				Steffen Schmidt
+@Company			PRODYNA AG
+@Date				2010-04-19
+@Version			1.0
+@Description		Property produce service
+public Service ProduceProperty {
+	
+	@ManualImplementation
+	public PropertyMsg produceProperty(ProducePropertyMsg producePropertyMsg) throws ProduceException;
+
+	@ManualImplementation
+	public PropertyMsg producePropertyClone(PropertyMsg propertyMsg) throws ProduceException;
+	
+}

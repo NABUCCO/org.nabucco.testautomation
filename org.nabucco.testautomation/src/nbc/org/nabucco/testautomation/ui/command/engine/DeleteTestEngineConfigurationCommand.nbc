@@ -1,0 +1,17 @@
+/*
+*  PRODYNA NABUCCO
+*  Copyright 2010, PRODYNA AG
+*/
+package org.nabucco.testautomation.ui.command.engine;
+
+@Author			Markus Jorroch
+@Company		PRODYNA AG
+@Date			2011-01-13
+@Description	This command is for deleting a TestEngineConfiguration from database
+@Id				org.nabucco.testautomation.ui.command.engine.DeleteTestEngineConfigurationCommand
+public Command DeleteTestEngineConfigurationCommand {
+
+	@ManualImplementation
+	public void deleteTestEngineConfigurationCommand();
+
+}

@@ -1,0 +1,25 @@
+/*
+ *  PRODYNA NABUCCO
+ *  Copyright 2010, PRODYNA AG
+ */
+package org.nabucco.testautomation.facade.datatype.property.base;
+
+@Author			Steffen Schmidt
+@Company		PRODYNA AG
+@Date			2010-10-01
+@Description	Enumeration indicating the type of usage of a PropertyList.
+public Enumeration PropertyUsageType {
+
+	@LiteralId	"C"
+    @Description The PropertyList is used by a {@link TestConfigElement}.
+    TEST_CONFIG_ELEMENT_PARAM
+
+    @LiteralId	"S"
+    @Description The PropertyList is used by a {@link TestScriptElement}.
+    TEST_SCRIPT_ELEMENT_PARAM
+
+    @LiteralId	"M"
+    @Description The PropertyList is used by a {@link Metadata}.
+    METADTA_PARAM
+
+}

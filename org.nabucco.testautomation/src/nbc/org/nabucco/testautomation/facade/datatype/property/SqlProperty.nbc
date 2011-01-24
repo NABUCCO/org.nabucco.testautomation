@@ -1,0 +1,25 @@
+/*
+*  PRODYNA NABUCCO
+*  Copyright 2010, PRODYNA AG
+*/
+package org.nabucco.testautomation.facade.datatype.property;
+
+import org.nabucco.testautomation.facade.datatype.base.SqlValue;
+import org.nabucco.testautomation.facade.datatype.property.base.PropertyComponent;
+import org.nabucco.testautomation.facade.datatype.property.base.PropertyType;
+
+@Author			Steffen Schmidt
+@Company		PRODYNA AG
+@Date			2010-11-25
+@Version		1.0
+@Description	Property containing SQL as value
+public Datatype SqlProperty extends PropertyComponent {
+
+	@Mandatory
+	@MaxLength 100000
+	private Basetype SqlValue[1] value;
+	
+	@Redefined
+	@Default SQL
+	protected Enumeration PropertyType[1] type;
+}

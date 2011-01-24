@@ -1,0 +1,30 @@
+/*
+*  PRODYNA NABUCCO
+*  Copyright 2010, PRODYNA AG
+*/
+package org.nabucco.testautomation.facade.message;
+
+import org.nabucco.framework.base.facade.datatype.Identifier;
+import org.nabucco.framework.base.facade.datatype.Name;
+import org.nabucco.framework.base.facade.datatype.Description;
+import org.nabucco.testautomation.facade.datatype.property.base.PropertyType;
+import org.nabucco.testautomation.facade.datatype.property.base.PropertyUsageType;
+
+@Author			Steffen Schmidt
+@Company		PRODYNA AG
+@Date			2010-04-19
+@Version		1.0
+@Description	Message for searching Properties
+public Message PropertySearchMsg {
+
+	private Basetype Name[1] propertyName;
+	
+	private Basetype Identifier[1] propertyId;
+	
+	private Basetype Description[1] propertyDescription;
+
+	private Enumeration PropertyType[1] propertyType;
+
+	private Enumeration PropertyUsageType[1] usageType;
+
+}
