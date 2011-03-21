@@ -3,17 +3,22 @@
  */
 package org.nabucco.testautomation.facade.datatype.engine;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.nabucco.framework.base.facade.datatype.Datatype;
 import org.nabucco.framework.base.facade.datatype.Description;
 import org.nabucco.framework.base.facade.datatype.NabuccoDatatype;
 import org.nabucco.framework.base.facade.datatype.Name;
 import org.nabucco.framework.base.facade.datatype.collection.NabuccoCollectionState;
 import org.nabucco.framework.base.facade.datatype.collection.NabuccoList;
-import org.nabucco.framework.base.facade.datatype.property.BasetypeProperty;
-import org.nabucco.framework.base.facade.datatype.property.DatatypeProperty;
-import org.nabucco.framework.base.facade.datatype.property.ListProperty;
+import org.nabucco.framework.base.facade.datatype.collection.NabuccoListImpl;
 import org.nabucco.framework.base.facade.datatype.property.NabuccoProperty;
+import org.nabucco.framework.base.facade.datatype.property.NabuccoPropertyContainer;
+import org.nabucco.framework.base.facade.datatype.property.NabuccoPropertyDescriptor;
+import org.nabucco.framework.base.facade.datatype.property.PropertyAssociationType;
+import org.nabucco.framework.base.facade.datatype.property.PropertyCache;
+import org.nabucco.framework.base.facade.datatype.property.PropertyDescriptorSupport;
 import org.nabucco.framework.base.facade.datatype.security.User;
 import org.nabucco.testautomation.facade.datatype.engine.proxy.ProxyConfiguration;
 
@@ -27,11 +32,22 @@ public class TestEngineConfiguration extends NabuccoDatatype implements Datatype
 
     private static final long serialVersionUID = 1L;
 
-    private static final String[] PROPERTY_NAMES = { "name", "description", "user", "host", "port",
-            "remoteReferenceName", "proxyConfigurations" };
+    private static final String[] PROPERTY_CONSTRAINTS = { "l0,255;m1,1;", "l0,255;m0,1;", "m0,1;",
+            "l0,255;m1,1;", "l0,255;m1,1;", "l0,255;m1,1;", "m0,n;" };
 
-    private static final String[] PROPERTY_CONSTRAINTS = { "l0,n;m1,1;", "l0,n;m0,1;", "m0,1;",
-            "l0,n;m1,1;", "l0,n;m1,1;", "l0,n;m1,1;", "m0,n;" };
+    public static final String NAME = "name";
+
+    public static final String DESCRIPTION = "description";
+
+    public static final String USER = "user";
+
+    public static final String HOST = "host";
+
+    public static final String PORT = "port";
+
+    public static final String REMOTEREFERENCENAME = "remoteReferenceName";
+
+    public static final String PROXYCONFIGURATIONS = "proxyConfigurations";
 
     private Name name;
 
@@ -47,7 +63,7 @@ public class TestEngineConfiguration extends NabuccoDatatype implements Datatype
 
     private Name remoteReferenceName;
 
-    private List<ProxyConfiguration> proxyConfigurations;
+    private NabuccoList<ProxyConfiguration> proxyConfigurations;
 
     /** Constructs a new TestEngineConfiguration instance. */
     public TestEngineConfiguration() {
@@ -87,9 +103,8 @@ public class TestEngineConfiguration extends NabuccoDatatype implements Datatype
         if ((this.getRemoteReferenceName() != null)) {
             clone.setRemoteReferenceName(this.getRemoteReferenceName().cloneObject());
         }
-        if ((this.proxyConfigurations instanceof NabuccoList<?>)) {
-            clone.proxyConfigurations = ((NabuccoList<ProxyConfiguration>) this.proxyConfigurations)
-                    .cloneCollection();
+        if ((this.proxyConfigurations != null)) {
+            clone.proxyConfigurations = this.proxyConfigurations.cloneCollection();
         }
     }
 
@@ -100,10 +115,10 @@ public class TestEngineConfiguration extends NabuccoDatatype implements Datatype
      */
     List<ProxyConfiguration> getProxyConfigurationsJPA() {
         if ((this.proxyConfigurations == null)) {
-            this.proxyConfigurations = new NabuccoList<ProxyConfiguration>(
+            this.proxyConfigurations = new NabuccoListImpl<ProxyConfiguration>(
                     NabuccoCollectionState.LAZY);
         }
-        return ((NabuccoList<ProxyConfiguration>) this.proxyConfigurations).getDelegate();
+        return ((NabuccoListImpl<ProxyConfiguration>) this.proxyConfigurations).getDelegate();
     }
 
     /**
@@ -113,11 +128,38 @@ public class TestEngineConfiguration extends NabuccoDatatype implements Datatype
      */
     void setProxyConfigurationsJPA(List<ProxyConfiguration> proxyConfigurations) {
         if ((this.proxyConfigurations == null)) {
-            this.proxyConfigurations = new NabuccoList<ProxyConfiguration>(
+            this.proxyConfigurations = new NabuccoListImpl<ProxyConfiguration>(
                     NabuccoCollectionState.LAZY);
         }
-        ((NabuccoList<ProxyConfiguration>) this.proxyConfigurations)
+        ((NabuccoListImpl<ProxyConfiguration>) this.proxyConfigurations)
                 .setDelegate(proxyConfigurations);
+    }
+
+    /**
+     * CreatePropertyContainer.
+     *
+     * @return the NabuccoPropertyContainer.
+     */
+    protected static NabuccoPropertyContainer createPropertyContainer() {
+        Map<String, NabuccoPropertyDescriptor> propertyMap = new HashMap<String, NabuccoPropertyDescriptor>();
+        propertyMap.putAll(PropertyCache.getInstance().retrieve(NabuccoDatatype.class)
+                .getPropertyMap());
+        propertyMap.put(NAME, PropertyDescriptorSupport.createBasetype(NAME, Name.class, 2,
+                PROPERTY_CONSTRAINTS[0], false));
+        propertyMap.put(DESCRIPTION, PropertyDescriptorSupport.createBasetype(DESCRIPTION,
+                Description.class, 3, PROPERTY_CONSTRAINTS[1], false));
+        propertyMap.put(USER, PropertyDescriptorSupport.createDatatype(USER, User.class, 4,
+                PROPERTY_CONSTRAINTS[2], false, PropertyAssociationType.COMPONENT));
+        propertyMap.put(HOST, PropertyDescriptorSupport.createBasetype(HOST, Name.class, 5,
+                PROPERTY_CONSTRAINTS[3], false));
+        propertyMap.put(PORT, PropertyDescriptorSupport.createBasetype(PORT, Name.class, 6,
+                PROPERTY_CONSTRAINTS[4], false));
+        propertyMap.put(REMOTEREFERENCENAME, PropertyDescriptorSupport.createBasetype(
+                REMOTEREFERENCENAME, Name.class, 7, PROPERTY_CONSTRAINTS[5], false));
+        propertyMap.put(PROXYCONFIGURATIONS, PropertyDescriptorSupport.createCollection(
+                PROXYCONFIGURATIONS, ProxyConfiguration.class, 8, PROPERTY_CONSTRAINTS[6], false,
+                PropertyAssociationType.COMPOSITION));
+        return new NabuccoPropertyContainer(propertyMap);
     }
 
     @Override
@@ -126,23 +168,58 @@ public class TestEngineConfiguration extends NabuccoDatatype implements Datatype
     }
 
     @Override
-    public List<NabuccoProperty<?>> getProperties() {
-        List<NabuccoProperty<?>> properties = super.getProperties();
-        properties.add(new BasetypeProperty<Name>(PROPERTY_NAMES[0], Name.class,
-                PROPERTY_CONSTRAINTS[0], this.name));
-        properties.add(new BasetypeProperty<Description>(PROPERTY_NAMES[1], Description.class,
-                PROPERTY_CONSTRAINTS[1], this.description));
-        properties.add(new DatatypeProperty<User>(PROPERTY_NAMES[2], User.class,
-                PROPERTY_CONSTRAINTS[2], this.user));
-        properties.add(new BasetypeProperty<Name>(PROPERTY_NAMES[3], Name.class,
-                PROPERTY_CONSTRAINTS[3], this.host));
-        properties.add(new BasetypeProperty<Name>(PROPERTY_NAMES[4], Name.class,
-                PROPERTY_CONSTRAINTS[4], this.port));
-        properties.add(new BasetypeProperty<Name>(PROPERTY_NAMES[5], Name.class,
-                PROPERTY_CONSTRAINTS[5], this.remoteReferenceName));
-        properties.add(new ListProperty<ProxyConfiguration>(PROPERTY_NAMES[6],
-                ProxyConfiguration.class, PROPERTY_CONSTRAINTS[6], this.proxyConfigurations));
+    public List<NabuccoProperty> getProperties() {
+        List<NabuccoProperty> properties = super.getProperties();
+        properties.add(super.createProperty(TestEngineConfiguration.getPropertyDescriptor(NAME),
+                this.name, null));
+        properties
+                .add(super.createProperty(
+                        TestEngineConfiguration.getPropertyDescriptor(DESCRIPTION),
+                        this.description, null));
+        properties.add(super.createProperty(TestEngineConfiguration.getPropertyDescriptor(USER),
+                this.user, this.userRefId));
+        properties.add(super.createProperty(TestEngineConfiguration.getPropertyDescriptor(HOST),
+                this.host, null));
+        properties.add(super.createProperty(TestEngineConfiguration.getPropertyDescriptor(PORT),
+                this.port, null));
+        properties.add(super.createProperty(
+                TestEngineConfiguration.getPropertyDescriptor(REMOTEREFERENCENAME),
+                this.remoteReferenceName, null));
+        properties.add(super.createProperty(
+                TestEngineConfiguration.getPropertyDescriptor(PROXYCONFIGURATIONS),
+                this.proxyConfigurations, null));
         return properties;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public boolean setProperty(NabuccoProperty property) {
+        if (super.setProperty(property)) {
+            return true;
+        }
+        if ((property.getName().equals(NAME) && (property.getType() == Name.class))) {
+            this.setName(((Name) property.getInstance()));
+            return true;
+        } else if ((property.getName().equals(DESCRIPTION) && (property.getType() == Description.class))) {
+            this.setDescription(((Description) property.getInstance()));
+            return true;
+        } else if ((property.getName().equals(USER) && (property.getType() == User.class))) {
+            this.setUser(((User) property.getInstance()));
+            return true;
+        } else if ((property.getName().equals(HOST) && (property.getType() == Name.class))) {
+            this.setHost(((Name) property.getInstance()));
+            return true;
+        } else if ((property.getName().equals(PORT) && (property.getType() == Name.class))) {
+            this.setPort(((Name) property.getInstance()));
+            return true;
+        } else if ((property.getName().equals(REMOTEREFERENCENAME) && (property.getType() == Name.class))) {
+            this.setRemoteReferenceName(((Name) property.getInstance()));
+            return true;
+        } else if ((property.getName().equals(PROXYCONFIGURATIONS) && (property.getType() == ProxyConfiguration.class))) {
+            this.proxyConfigurations = ((NabuccoList<ProxyConfiguration>) property.getInstance());
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -214,23 +291,6 @@ public class TestEngineConfiguration extends NabuccoDatatype implements Datatype
     }
 
     @Override
-    public String toString() {
-        StringBuilder appendable = new StringBuilder();
-        appendable.append("<TestEngineConfiguration>\n");
-        appendable.append(super.toString());
-        appendable.append((("<name>" + this.name) + "</name>\n"));
-        appendable.append((("<description>" + this.description) + "</description>\n"));
-        appendable.append((("<user>" + this.user) + "</user>\n"));
-        appendable.append((("<userRefId>" + this.userRefId) + "</userRefId>\n"));
-        appendable.append((("<host>" + this.host) + "</host>\n"));
-        appendable.append((("<port>" + this.port) + "</port>\n"));
-        appendable
-                .append((("<remoteReferenceName>" + this.remoteReferenceName) + "</remoteReferenceName>\n"));
-        appendable.append("</TestEngineConfiguration>\n");
-        return appendable.toString();
-    }
-
-    @Override
     public TestEngineConfiguration cloneObject() {
         TestEngineConfiguration clone = new TestEngineConfiguration();
         this.cloneObject(clone);
@@ -262,6 +322,9 @@ public class TestEngineConfiguration extends NabuccoDatatype implements Datatype
      */
     public void setName(String name) {
         if ((this.name == null)) {
+            if ((name == null)) {
+                return;
+            }
             this.name = new Name();
         }
         this.name.setValue(name);
@@ -292,6 +355,9 @@ public class TestEngineConfiguration extends NabuccoDatatype implements Datatype
      */
     public void setDescription(String description) {
         if ((this.description == null)) {
+            if ((description == null)) {
+                return;
+            }
             this.description = new Description();
         }
         this.description.setValue(description);
@@ -363,6 +429,9 @@ public class TestEngineConfiguration extends NabuccoDatatype implements Datatype
      */
     public void setHost(String host) {
         if ((this.host == null)) {
+            if ((host == null)) {
+                return;
+            }
             this.host = new Name();
         }
         this.host.setValue(host);
@@ -393,6 +462,9 @@ public class TestEngineConfiguration extends NabuccoDatatype implements Datatype
      */
     public void setPort(String port) {
         if ((this.port == null)) {
+            if ((port == null)) {
+                return;
+            }
             this.port = new Name();
         }
         this.port.setValue(port);
@@ -423,6 +495,9 @@ public class TestEngineConfiguration extends NabuccoDatatype implements Datatype
      */
     public void setRemoteReferenceName(String remoteReferenceName) {
         if ((this.remoteReferenceName == null)) {
+            if ((remoteReferenceName == null)) {
+                return;
+            }
             this.remoteReferenceName = new Name();
         }
         this.remoteReferenceName.setValue(remoteReferenceName);
@@ -431,13 +506,34 @@ public class TestEngineConfiguration extends NabuccoDatatype implements Datatype
     /**
      * Missing description at method getProxyConfigurations.
      *
-     * @return the List<ProxyConfiguration>.
+     * @return the NabuccoList<ProxyConfiguration>.
      */
-    public List<ProxyConfiguration> getProxyConfigurations() {
+    public NabuccoList<ProxyConfiguration> getProxyConfigurations() {
         if ((this.proxyConfigurations == null)) {
-            this.proxyConfigurations = new NabuccoList<ProxyConfiguration>(
+            this.proxyConfigurations = new NabuccoListImpl<ProxyConfiguration>(
                     NabuccoCollectionState.INITIALIZED);
         }
         return this.proxyConfigurations;
+    }
+
+    /**
+     * Getter for the PropertyDescriptor.
+     *
+     * @param propertyName the String.
+     * @return the NabuccoPropertyDescriptor.
+     */
+    public static NabuccoPropertyDescriptor getPropertyDescriptor(String propertyName) {
+        return PropertyCache.getInstance().retrieve(TestEngineConfiguration.class)
+                .getProperty(propertyName);
+    }
+
+    /**
+     * Getter for the PropertyDescriptorList.
+     *
+     * @return the List<NabuccoPropertyDescriptor>.
+     */
+    public static List<NabuccoPropertyDescriptor> getPropertyDescriptorList() {
+        return PropertyCache.getInstance().retrieve(TestEngineConfiguration.class)
+                .getAllProperties();
     }
 }

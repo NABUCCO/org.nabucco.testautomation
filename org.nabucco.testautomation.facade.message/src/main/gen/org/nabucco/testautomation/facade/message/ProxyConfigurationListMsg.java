@@ -3,10 +3,18 @@
  */
 package org.nabucco.testautomation.facade.message;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import org.nabucco.framework.base.facade.datatype.property.ListProperty;
+import java.util.Map;
+import org.nabucco.framework.base.facade.datatype.collection.NabuccoCollectionState;
+import org.nabucco.framework.base.facade.datatype.collection.NabuccoList;
+import org.nabucco.framework.base.facade.datatype.collection.NabuccoListImpl;
 import org.nabucco.framework.base.facade.datatype.property.NabuccoProperty;
+import org.nabucco.framework.base.facade.datatype.property.NabuccoPropertyContainer;
+import org.nabucco.framework.base.facade.datatype.property.NabuccoPropertyDescriptor;
+import org.nabucco.framework.base.facade.datatype.property.PropertyAssociationType;
+import org.nabucco.framework.base.facade.datatype.property.PropertyCache;
+import org.nabucco.framework.base.facade.datatype.property.PropertyDescriptorSupport;
 import org.nabucco.framework.base.facade.message.ServiceMessage;
 import org.nabucco.framework.base.facade.message.ServiceMessageSupport;
 import org.nabucco.testautomation.facade.datatype.engine.proxy.ProxyConfiguration;
@@ -21,23 +29,50 @@ public class ProxyConfigurationListMsg extends ServiceMessageSupport implements 
 
     private static final long serialVersionUID = 1L;
 
-    private static final String[] PROPERTY_NAMES = { "proxyConfigurationList" };
-
     private static final String[] PROPERTY_CONSTRAINTS = { "m0,n;" };
 
-    private List<ProxyConfiguration> proxyConfigurationList;
+    public static final String PROXYCONFIGURATIONLIST = "proxyConfigurationList";
+
+    private NabuccoList<ProxyConfiguration> proxyConfigurationList;
 
     /** Constructs a new ProxyConfigurationListMsg instance. */
     public ProxyConfigurationListMsg() {
         super();
     }
 
+    /**
+     * CreatePropertyContainer.
+     *
+     * @return the NabuccoPropertyContainer.
+     */
+    protected static NabuccoPropertyContainer createPropertyContainer() {
+        Map<String, NabuccoPropertyDescriptor> propertyMap = new HashMap<String, NabuccoPropertyDescriptor>();
+        propertyMap.put(PROXYCONFIGURATIONLIST, PropertyDescriptorSupport.createCollection(
+                PROXYCONFIGURATIONLIST, ProxyConfiguration.class, 0, PROPERTY_CONSTRAINTS[0],
+                false, PropertyAssociationType.COMPOSITION));
+        return new NabuccoPropertyContainer(propertyMap);
+    }
+
     @Override
-    public List<NabuccoProperty<?>> getProperties() {
-        List<NabuccoProperty<?>> properties = super.getProperties();
-        properties.add(new ListProperty<ProxyConfiguration>(PROPERTY_NAMES[0],
-                ProxyConfiguration.class, PROPERTY_CONSTRAINTS[0], this.proxyConfigurationList));
+    public List<NabuccoProperty> getProperties() {
+        List<NabuccoProperty> properties = super.getProperties();
+        properties.add(super.createProperty(
+                ProxyConfigurationListMsg.getPropertyDescriptor(PROXYCONFIGURATIONLIST),
+                this.proxyConfigurationList));
         return properties;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public boolean setProperty(NabuccoProperty property) {
+        if (super.setProperty(property)) {
+            return true;
+        }
+        if ((property.getName().equals(PROXYCONFIGURATIONLIST) && (property.getType() == ProxyConfiguration.class))) {
+            this.proxyConfigurationList = ((NabuccoList<ProxyConfiguration>) property.getInstance());
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -73,17 +108,6 @@ public class ProxyConfigurationListMsg extends ServiceMessageSupport implements 
     }
 
     @Override
-    public String toString() {
-        StringBuilder appendable = new StringBuilder();
-        appendable.append("<ProxyConfigurationListMsg>\n");
-        appendable.append(super.toString());
-        appendable
-                .append((("<proxyConfigurationList>" + this.proxyConfigurationList) + "</proxyConfigurationList>\n"));
-        appendable.append("</ProxyConfigurationListMsg>\n");
-        return appendable.toString();
-    }
-
-    @Override
     public ServiceMessage cloneObject() {
         return this;
     }
@@ -91,12 +115,34 @@ public class ProxyConfigurationListMsg extends ServiceMessageSupport implements 
     /**
      * Missing description at method getProxyConfigurationList.
      *
-     * @return the List<ProxyConfiguration>.
+     * @return the NabuccoList<ProxyConfiguration>.
      */
-    public List<ProxyConfiguration> getProxyConfigurationList() {
+    public NabuccoList<ProxyConfiguration> getProxyConfigurationList() {
         if ((this.proxyConfigurationList == null)) {
-            this.proxyConfigurationList = new ArrayList<ProxyConfiguration>();
+            this.proxyConfigurationList = new NabuccoListImpl<ProxyConfiguration>(
+                    NabuccoCollectionState.INITIALIZED);
         }
         return this.proxyConfigurationList;
+    }
+
+    /**
+     * Getter for the PropertyDescriptor.
+     *
+     * @param propertyName the String.
+     * @return the NabuccoPropertyDescriptor.
+     */
+    public static NabuccoPropertyDescriptor getPropertyDescriptor(String propertyName) {
+        return PropertyCache.getInstance().retrieve(ProxyConfigurationListMsg.class)
+                .getProperty(propertyName);
+    }
+
+    /**
+     * Getter for the PropertyDescriptorList.
+     *
+     * @return the List<NabuccoPropertyDescriptor>.
+     */
+    public static List<NabuccoPropertyDescriptor> getPropertyDescriptorList() {
+        return PropertyCache.getInstance().retrieve(ProxyConfigurationListMsg.class)
+                .getAllProperties();
     }
 }

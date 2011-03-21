@@ -1,7 +1,19 @@
 /*
- *	PRODYNA NABUCCO
- *  Copyright 2010, PRODYNA AG
- */
+* Copyright 2010 PRODYNA AG
+*
+* Licensed under the Eclipse Public License (EPL), Version 1.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.opensource.org/licenses/eclipse-1.0.php or
+* http://www.nabucco-source.org/nabucco-license.html
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
 package org.nabucco.testautomation.facade.component;
 
 import org.nabucco.testautomation.facade.datatype.engine.TestEngineConfiguration;
@@ -28,6 +40,8 @@ import org.nabucco.testautomation.facade.service.search.SearchProperty;
 import org.nabucco.testautomation.facade.service.maintain.MaintainTestEngineConfiguration;
 import org.nabucco.testautomation.facade.service.produce.ProduceTestEngineConfiguration;
 import org.nabucco.testautomation.facade.service.search.SearchTestEngineConfiguration;
+import org.nabucco.testautomation.facade.service.export.ExportTestautomation;
+import org.nabucco.testautomation.facade.service.importing.ImportTestautomation;
 
 @Author			Steffen Schmidt
 @Company		PRODYNA AG
@@ -41,9 +55,9 @@ public Component TestautomationComponent {
 	
 	private persistent Datatype Property[1] property;
 
-	private persistent Datatype PropertyComposite[1] property;
-
-	private persistent Datatype PropertyContainer[1] property;
+	private persistent Datatype PropertyComposite[1] propertyComposite;
+	
+	private persistent Datatype PropertyContainer[1] propertyContainer;
 
 	private persistent Datatype BooleanProperty[1] booleanProperty;
 
@@ -85,5 +99,8 @@ public Component TestautomationComponent {
 	
 	public Service SearchTestEngineConfiguration;
 
+	public Service ExportTestautomation;
+
+	public Service ImportTestautomation;
 
 }

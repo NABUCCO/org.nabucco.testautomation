@@ -47,7 +47,6 @@ public class EngineCopyPasteHandler implements CopyPasteHandler {
 			if(targetDatatype instanceof TestEngineConfiguration){
 				if(copiedDatatype instanceof ProxyConfiguration){
 					ProxyConfiguration copiedProxyConfiguration = (ProxyConfiguration) copiedDatatype;
-					copiedProxyConfiguration.setId(null);
 					clone = EngineElementFactory.cloneProxyConfiguration(copiedProxyConfiguration);	
 					((TestEngineConfiguration) targetDatatype).getProxyConfigurations().add((ProxyConfiguration) clone);
 				} else {
@@ -56,7 +55,6 @@ public class EngineCopyPasteHandler implements CopyPasteHandler {
 			} else if(targetDatatype instanceof ProxyConfiguration){
 				if(copiedDatatype instanceof ConfigurationProperty){
 					ConfigurationProperty copiedConfigurationProperty = (ConfigurationProperty) copiedDatatype;
-					copiedConfigurationProperty.setId(null);
 					clone = EngineElementFactory.cloneConfigurationProperty(copiedConfigurationProperty);	
 					((ProxyConfiguration) targetDatatype).getConfigurationProperties().add((ConfigurationProperty) clone);
 				} else {

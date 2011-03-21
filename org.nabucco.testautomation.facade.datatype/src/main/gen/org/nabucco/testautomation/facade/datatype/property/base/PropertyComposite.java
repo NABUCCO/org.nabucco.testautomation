@@ -3,12 +3,19 @@
  */
 package org.nabucco.testautomation.facade.datatype.property.base;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.nabucco.framework.base.facade.datatype.Datatype;
 import org.nabucco.framework.base.facade.datatype.collection.NabuccoCollectionState;
 import org.nabucco.framework.base.facade.datatype.collection.NabuccoList;
-import org.nabucco.framework.base.facade.datatype.property.ListProperty;
+import org.nabucco.framework.base.facade.datatype.collection.NabuccoListImpl;
 import org.nabucco.framework.base.facade.datatype.property.NabuccoProperty;
+import org.nabucco.framework.base.facade.datatype.property.NabuccoPropertyContainer;
+import org.nabucco.framework.base.facade.datatype.property.NabuccoPropertyDescriptor;
+import org.nabucco.framework.base.facade.datatype.property.PropertyAssociationType;
+import org.nabucco.framework.base.facade.datatype.property.PropertyCache;
+import org.nabucco.framework.base.facade.datatype.property.PropertyDescriptorSupport;
 import org.nabucco.testautomation.facade.datatype.property.base.Property;
 import org.nabucco.testautomation.facade.datatype.property.base.PropertyContainer;
 
@@ -22,11 +29,11 @@ public abstract class PropertyComposite extends Property implements Datatype {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String[] PROPERTY_NAMES = { "propertyList" };
-
     private static final String[] PROPERTY_CONSTRAINTS = { "m0,n;" };
 
-    private List<PropertyContainer> propertyList;
+    public static final String PROPERTYLIST = "propertyList";
+
+    private NabuccoList<PropertyContainer> propertyList;
 
     /** Constructs a new PropertyComposite instance. */
     public PropertyComposite() {
@@ -45,9 +52,8 @@ public abstract class PropertyComposite extends Property implements Datatype {
      */
     protected void cloneObject(PropertyComposite clone) {
         super.cloneObject(clone);
-        if ((this.propertyList instanceof NabuccoList<?>)) {
-            clone.propertyList = ((NabuccoList<PropertyContainer>) this.propertyList)
-                    .cloneCollection();
+        if ((this.propertyList != null)) {
+            clone.propertyList = this.propertyList.cloneCollection();
         }
     }
 
@@ -58,9 +64,9 @@ public abstract class PropertyComposite extends Property implements Datatype {
      */
     List<PropertyContainer> getPropertyListJPA() {
         if ((this.propertyList == null)) {
-            this.propertyList = new NabuccoList<PropertyContainer>(NabuccoCollectionState.LAZY);
+            this.propertyList = new NabuccoListImpl<PropertyContainer>(NabuccoCollectionState.LAZY);
         }
-        return ((NabuccoList<PropertyContainer>) this.propertyList).getDelegate();
+        return ((NabuccoListImpl<PropertyContainer>) this.propertyList).getDelegate();
     }
 
     /**
@@ -70,9 +76,23 @@ public abstract class PropertyComposite extends Property implements Datatype {
      */
     void setPropertyListJPA(List<PropertyContainer> propertyList) {
         if ((this.propertyList == null)) {
-            this.propertyList = new NabuccoList<PropertyContainer>(NabuccoCollectionState.LAZY);
+            this.propertyList = new NabuccoListImpl<PropertyContainer>(NabuccoCollectionState.LAZY);
         }
-        ((NabuccoList<PropertyContainer>) this.propertyList).setDelegate(propertyList);
+        ((NabuccoListImpl<PropertyContainer>) this.propertyList).setDelegate(propertyList);
+    }
+
+    /**
+     * CreatePropertyContainer.
+     *
+     * @return the NabuccoPropertyContainer.
+     */
+    protected static NabuccoPropertyContainer createPropertyContainer() {
+        Map<String, NabuccoPropertyDescriptor> propertyMap = new HashMap<String, NabuccoPropertyDescriptor>();
+        propertyMap.putAll(PropertyCache.getInstance().retrieve(Property.class).getPropertyMap());
+        propertyMap.put(PROPERTYLIST, PropertyDescriptorSupport.createCollection(PROPERTYLIST,
+                PropertyContainer.class, 8, PROPERTY_CONSTRAINTS[0], false,
+                PropertyAssociationType.COMPOSITION));
+        return new NabuccoPropertyContainer(propertyMap);
     }
 
     @Override
@@ -81,18 +101,24 @@ public abstract class PropertyComposite extends Property implements Datatype {
     }
 
     @Override
-    public List<NabuccoProperty<?>> getProperties() {
-        List<NabuccoProperty<?>> properties = super.getProperties();
-        properties.add(new ListProperty<PropertyContainer>(PROPERTY_NAMES[0],
-                PropertyContainer.class, PROPERTY_CONSTRAINTS[0], this.propertyList));
+    public List<NabuccoProperty> getProperties() {
+        List<NabuccoProperty> properties = super.getProperties();
+        properties.add(super.createProperty(PropertyComposite.getPropertyDescriptor(PROPERTYLIST),
+                this.propertyList, null));
         return properties;
     }
 
     @Override
-    public String toString() {
-        StringBuilder appendable = new StringBuilder();
-        appendable.append(super.toString());
-        return appendable.toString();
+    @SuppressWarnings("unchecked")
+    public boolean setProperty(NabuccoProperty property) {
+        if (super.setProperty(property)) {
+            return true;
+        }
+        if ((property.getName().equals(PROPERTYLIST) && (property.getType() == PropertyContainer.class))) {
+            this.propertyList = ((NabuccoList<PropertyContainer>) property.getInstance());
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -101,13 +127,33 @@ public abstract class PropertyComposite extends Property implements Datatype {
     /**
      * Missing description at method getPropertyList.
      *
-     * @return the List<PropertyContainer>.
+     * @return the NabuccoList<PropertyContainer>.
      */
-    public List<PropertyContainer> getPropertyList() {
+    public NabuccoList<PropertyContainer> getPropertyList() {
         if ((this.propertyList == null)) {
-            this.propertyList = new NabuccoList<PropertyContainer>(
+            this.propertyList = new NabuccoListImpl<PropertyContainer>(
                     NabuccoCollectionState.INITIALIZED);
         }
         return this.propertyList;
+    }
+
+    /**
+     * Getter for the PropertyDescriptor.
+     *
+     * @param propertyName the String.
+     * @return the NabuccoPropertyDescriptor.
+     */
+    public static NabuccoPropertyDescriptor getPropertyDescriptor(String propertyName) {
+        return PropertyCache.getInstance().retrieve(PropertyComposite.class)
+                .getProperty(propertyName);
+    }
+
+    /**
+     * Getter for the PropertyDescriptorList.
+     *
+     * @return the List<NabuccoPropertyDescriptor>.
+     */
+    public static List<NabuccoPropertyDescriptor> getPropertyDescriptorList() {
+        return PropertyCache.getInstance().retrieve(PropertyComposite.class).getAllProperties();
     }
 }

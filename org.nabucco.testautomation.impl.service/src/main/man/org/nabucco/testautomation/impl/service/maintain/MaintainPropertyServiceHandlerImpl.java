@@ -19,6 +19,8 @@ package org.nabucco.testautomation.impl.service.maintain;
 import java.util.List;
 
 import org.nabucco.framework.base.facade.datatype.DatatypeState;
+import org.nabucco.framework.base.facade.datatype.collection.NabuccoCollectionAccessor;
+import org.nabucco.framework.base.facade.datatype.visitor.DatatypeVisitor;
 import org.nabucco.framework.base.facade.exception.persistence.PersistenceException;
 import org.nabucco.framework.base.facade.exception.persistence.PersistenceExceptionMapper;
 import org.nabucco.framework.base.facade.exception.service.MaintainException;
@@ -28,8 +30,8 @@ import org.nabucco.testautomation.facade.datatype.property.base.Property;
 import org.nabucco.testautomation.facade.datatype.property.base.PropertyComponent;
 import org.nabucco.testautomation.facade.datatype.property.base.PropertyComposite;
 import org.nabucco.testautomation.facade.datatype.property.base.PropertyContainer;
+import org.nabucco.testautomation.facade.datatype.visitor.PropertyModificationVisitor;
 import org.nabucco.testautomation.facade.message.PropertyMsg;
-import org.nabucco.testautomation.impl.service.maintain.MaintainPropertyServiceHandler;
 
 
 /**
@@ -40,6 +42,8 @@ import org.nabucco.testautomation.impl.service.maintain.MaintainPropertyServiceH
 public class MaintainPropertyServiceHandlerImpl extends MaintainPropertyServiceHandler {
 
 	private static final long serialVersionUID = 1L;
+	
+	private static final String PREFIX = "PROP-";
 	
 	private static final PropertySorter propertySorter = new PropertySorter();
 	
@@ -57,8 +61,16 @@ public class MaintainPropertyServiceHandlerImpl extends MaintainPropertyServiceH
 	private Property maintain(Property property) throws MaintainException {
 		
 		try {
-			// init PersitenceHelper
+			// init PersistenceHelper
 			this.helper = new PersistenceHelper(super.getEntityManager());
+			
+			// Check Property for modification
+			if (property.getDatatypeState() == DatatypeState.PERSISTENT
+					&& property instanceof PropertyComposite) {
+	            DatatypeVisitor visitor = new PropertyModificationVisitor(
+	            		(PropertyComposite) property);
+	            property.accept(visitor);
+	        }
 			
             switch (property.getDatatypeState()) {
 
@@ -129,6 +141,11 @@ public class MaintainPropertyServiceHandlerImpl extends MaintainPropertyServiceH
 		} else if (entity instanceof PropertyComposite) {
 			entity = createChildren((PropertyComposite) entity);
 		}
+		
+		// Generate PropertyKey
+		entity.setIdentificationKey(PREFIX + entity.getId());
+		entity.setDatatypeState(DatatypeState.MODIFIED);
+		entity = this.helper.persist(entity);
 		return entity;
 	}
 	
@@ -170,6 +187,7 @@ public class MaintainPropertyServiceHandlerImpl extends MaintainPropertyServiceH
 	private Property updateChildren(PropertyComposite property) throws PersistenceException {
 		
 		List<PropertyContainer> children = property.getPropertyList();
+		List<PropertyContainer> removedChildren = NabuccoCollectionAccessor.getInstance().getUnassignedList(children);
 		
 		for (int i = 0; i < children.size(); i++) {
 			PropertyContainer child = children.get(i);
@@ -191,6 +209,16 @@ public class MaintainPropertyServiceHandlerImpl extends MaintainPropertyServiceH
 			child.setProperty(childProp);
 			child = this.helper.persist(child);
 			children.set(i, child);
+		}
+		
+		for (PropertyContainer propertyContainer : removedChildren) {
+			
+			// Do not delete TestScriptElementContainer that were moved by Drag&Drop
+			if (propertyContainer.getDatatypeState() != DatatypeState.DELETED) {
+				continue;
+			}
+			this.helper.persist(propertyContainer);
+			delete(propertyContainer.getProperty());
 		}
 		
 		this.helper.persist(property);

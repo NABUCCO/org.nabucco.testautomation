@@ -3,9 +3,15 @@
  */
 package org.nabucco.testautomation.facade.message;
 
+import java.util.HashMap;
 import java.util.List;
-import org.nabucco.framework.base.facade.datatype.property.DatatypeProperty;
+import java.util.Map;
 import org.nabucco.framework.base.facade.datatype.property.NabuccoProperty;
+import org.nabucco.framework.base.facade.datatype.property.NabuccoPropertyContainer;
+import org.nabucco.framework.base.facade.datatype.property.NabuccoPropertyDescriptor;
+import org.nabucco.framework.base.facade.datatype.property.PropertyAssociationType;
+import org.nabucco.framework.base.facade.datatype.property.PropertyCache;
+import org.nabucco.framework.base.facade.datatype.property.PropertyDescriptorSupport;
 import org.nabucco.framework.base.facade.message.ServiceMessage;
 import org.nabucco.framework.base.facade.message.ServiceMessageSupport;
 import org.nabucco.testautomation.facade.datatype.property.base.Property;
@@ -21,9 +27,11 @@ public class PropertyMsg extends ServiceMessageSupport implements ServiceMessage
 
     private static final long serialVersionUID = 1L;
 
-    private static final String[] PROPERTY_NAMES = { "property", "propertyContainer" };
-
     private static final String[] PROPERTY_CONSTRAINTS = { "m1,1;", "m1,1;" };
+
+    public static final String PROPERTY = "property";
+
+    public static final String PROPERTYCONTAINER = "propertyContainer";
 
     private Property property;
 
@@ -34,14 +42,45 @@ public class PropertyMsg extends ServiceMessageSupport implements ServiceMessage
         super();
     }
 
+    /**
+     * CreatePropertyContainer.
+     *
+     * @return the NabuccoPropertyContainer.
+     */
+    protected static NabuccoPropertyContainer createPropertyContainer() {
+        Map<String, NabuccoPropertyDescriptor> propertyMap = new HashMap<String, NabuccoPropertyDescriptor>();
+        propertyMap.put(PROPERTY, PropertyDescriptorSupport.createDatatype(PROPERTY,
+                Property.class, 0, PROPERTY_CONSTRAINTS[0], false,
+                PropertyAssociationType.COMPOSITION));
+        propertyMap.put(PROPERTYCONTAINER, PropertyDescriptorSupport.createDatatype(
+                PROPERTYCONTAINER, PropertyContainer.class, 1, PROPERTY_CONSTRAINTS[1], false,
+                PropertyAssociationType.COMPOSITION));
+        return new NabuccoPropertyContainer(propertyMap);
+    }
+
     @Override
-    public List<NabuccoProperty<?>> getProperties() {
-        List<NabuccoProperty<?>> properties = super.getProperties();
-        properties.add(new DatatypeProperty<Property>(PROPERTY_NAMES[0], Property.class,
-                PROPERTY_CONSTRAINTS[0], this.property));
-        properties.add(new DatatypeProperty<PropertyContainer>(PROPERTY_NAMES[1],
-                PropertyContainer.class, PROPERTY_CONSTRAINTS[1], this.propertyContainer));
+    public List<NabuccoProperty> getProperties() {
+        List<NabuccoProperty> properties = super.getProperties();
+        properties.add(super.createProperty(PropertyMsg.getPropertyDescriptor(PROPERTY),
+                this.property));
+        properties.add(super.createProperty(PropertyMsg.getPropertyDescriptor(PROPERTYCONTAINER),
+                this.propertyContainer));
         return properties;
+    }
+
+    @Override
+    public boolean setProperty(NabuccoProperty property) {
+        if (super.setProperty(property)) {
+            return true;
+        }
+        if ((property.getName().equals(PROPERTY) && (property.getType() == Property.class))) {
+            this.setProperty(((Property) property.getInstance()));
+            return true;
+        } else if ((property.getName().equals(PROPERTYCONTAINER) && (property.getType() == PropertyContainer.class))) {
+            this.setPropertyContainer(((PropertyContainer) property.getInstance()));
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -83,18 +122,6 @@ public class PropertyMsg extends ServiceMessageSupport implements ServiceMessage
     }
 
     @Override
-    public String toString() {
-        StringBuilder appendable = new StringBuilder();
-        appendable.append("<PropertyMsg>\n");
-        appendable.append(super.toString());
-        appendable.append((("<property>" + this.property) + "</property>\n"));
-        appendable
-                .append((("<propertyContainer>" + this.propertyContainer) + "</propertyContainer>\n"));
-        appendable.append("</PropertyMsg>\n");
-        return appendable.toString();
-    }
-
-    @Override
     public ServiceMessage cloneObject() {
         return this;
     }
@@ -133,5 +160,24 @@ public class PropertyMsg extends ServiceMessageSupport implements ServiceMessage
      */
     public void setPropertyContainer(PropertyContainer propertyContainer) {
         this.propertyContainer = propertyContainer;
+    }
+
+    /**
+     * Getter for the PropertyDescriptor.
+     *
+     * @param propertyName the String.
+     * @return the NabuccoPropertyDescriptor.
+     */
+    public static NabuccoPropertyDescriptor getPropertyDescriptor(String propertyName) {
+        return PropertyCache.getInstance().retrieve(PropertyMsg.class).getProperty(propertyName);
+    }
+
+    /**
+     * Getter for the PropertyDescriptorList.
+     *
+     * @return the List<NabuccoPropertyDescriptor>.
+     */
+    public static List<NabuccoPropertyDescriptor> getPropertyDescriptorList() {
+        return PropertyCache.getInstance().retrieve(PropertyMsg.class).getAllProperties();
     }
 }

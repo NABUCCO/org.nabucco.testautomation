@@ -3,12 +3,17 @@
  */
 package org.nabucco.testautomation.facade.datatype.engine.proxy;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.nabucco.framework.base.facade.datatype.Datatype;
 import org.nabucco.framework.base.facade.datatype.NabuccoDatatype;
 import org.nabucco.framework.base.facade.datatype.Name;
-import org.nabucco.framework.base.facade.datatype.property.BasetypeProperty;
 import org.nabucco.framework.base.facade.datatype.property.NabuccoProperty;
+import org.nabucco.framework.base.facade.datatype.property.NabuccoPropertyContainer;
+import org.nabucco.framework.base.facade.datatype.property.NabuccoPropertyDescriptor;
+import org.nabucco.framework.base.facade.datatype.property.PropertyCache;
+import org.nabucco.framework.base.facade.datatype.property.PropertyDescriptorSupport;
 import org.nabucco.testautomation.facade.datatype.base.StringValue;
 
 /**
@@ -21,9 +26,11 @@ public class ConfigurationProperty extends NabuccoDatatype implements Datatype {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String[] PROPERTY_NAMES = { "name", "value" };
+    private static final String[] PROPERTY_CONSTRAINTS = { "l0,255;m1,1;", "l0,n;m1,1;" };
 
-    private static final String[] PROPERTY_CONSTRAINTS = { "l0,n;m1,1;", "l0,n;m1,1;" };
+    public static final String NAME = "name";
+
+    public static final String VALUE = "value";
 
     private Name name;
 
@@ -54,19 +61,50 @@ public class ConfigurationProperty extends NabuccoDatatype implements Datatype {
         }
     }
 
+    /**
+     * CreatePropertyContainer.
+     *
+     * @return the NabuccoPropertyContainer.
+     */
+    protected static NabuccoPropertyContainer createPropertyContainer() {
+        Map<String, NabuccoPropertyDescriptor> propertyMap = new HashMap<String, NabuccoPropertyDescriptor>();
+        propertyMap.putAll(PropertyCache.getInstance().retrieve(NabuccoDatatype.class)
+                .getPropertyMap());
+        propertyMap.put(NAME, PropertyDescriptorSupport.createBasetype(NAME, Name.class, 2,
+                PROPERTY_CONSTRAINTS[0], false));
+        propertyMap.put(VALUE, PropertyDescriptorSupport.createBasetype(VALUE, StringValue.class,
+                3, PROPERTY_CONSTRAINTS[1], false));
+        return new NabuccoPropertyContainer(propertyMap);
+    }
+
     @Override
     public void init() {
         this.initDefaults();
     }
 
     @Override
-    public List<NabuccoProperty<?>> getProperties() {
-        List<NabuccoProperty<?>> properties = super.getProperties();
-        properties.add(new BasetypeProperty<Name>(PROPERTY_NAMES[0], Name.class,
-                PROPERTY_CONSTRAINTS[0], this.name));
-        properties.add(new BasetypeProperty<StringValue>(PROPERTY_NAMES[1], StringValue.class,
-                PROPERTY_CONSTRAINTS[1], this.value));
+    public List<NabuccoProperty> getProperties() {
+        List<NabuccoProperty> properties = super.getProperties();
+        properties.add(super.createProperty(ConfigurationProperty.getPropertyDescriptor(NAME),
+                this.name, null));
+        properties.add(super.createProperty(ConfigurationProperty.getPropertyDescriptor(VALUE),
+                this.value, null));
         return properties;
+    }
+
+    @Override
+    public boolean setProperty(NabuccoProperty property) {
+        if (super.setProperty(property)) {
+            return true;
+        }
+        if ((property.getName().equals(NAME) && (property.getType() == Name.class))) {
+            this.setName(((Name) property.getInstance()));
+            return true;
+        } else if ((property.getName().equals(VALUE) && (property.getType() == StringValue.class))) {
+            this.setValue(((StringValue) property.getInstance()));
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -107,17 +145,6 @@ public class ConfigurationProperty extends NabuccoDatatype implements Datatype {
     }
 
     @Override
-    public String toString() {
-        StringBuilder appendable = new StringBuilder();
-        appendable.append("<ConfigurationProperty>\n");
-        appendable.append(super.toString());
-        appendable.append((("<name>" + this.name) + "</name>\n"));
-        appendable.append((("<value>" + this.value) + "</value>\n"));
-        appendable.append("</ConfigurationProperty>\n");
-        return appendable.toString();
-    }
-
-    @Override
     public ConfigurationProperty cloneObject() {
         ConfigurationProperty clone = new ConfigurationProperty();
         this.cloneObject(clone);
@@ -149,6 +176,9 @@ public class ConfigurationProperty extends NabuccoDatatype implements Datatype {
      */
     public void setName(String name) {
         if ((this.name == null)) {
+            if ((name == null)) {
+                return;
+            }
             this.name = new Name();
         }
         this.name.setValue(name);
@@ -179,8 +209,31 @@ public class ConfigurationProperty extends NabuccoDatatype implements Datatype {
      */
     public void setValue(String value) {
         if ((this.value == null)) {
+            if ((value == null)) {
+                return;
+            }
             this.value = new StringValue();
         }
         this.value.setValue(value);
+    }
+
+    /**
+     * Getter for the PropertyDescriptor.
+     *
+     * @param propertyName the String.
+     * @return the NabuccoPropertyDescriptor.
+     */
+    public static NabuccoPropertyDescriptor getPropertyDescriptor(String propertyName) {
+        return PropertyCache.getInstance().retrieve(ConfigurationProperty.class)
+                .getProperty(propertyName);
+    }
+
+    /**
+     * Getter for the PropertyDescriptorList.
+     *
+     * @return the List<NabuccoPropertyDescriptor>.
+     */
+    public static List<NabuccoPropertyDescriptor> getPropertyDescriptorList() {
+        return PropertyCache.getInstance().retrieve(ConfigurationProperty.class).getAllProperties();
     }
 }

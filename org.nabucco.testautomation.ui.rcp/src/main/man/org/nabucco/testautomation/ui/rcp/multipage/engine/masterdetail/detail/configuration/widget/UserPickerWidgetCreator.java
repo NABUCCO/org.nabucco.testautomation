@@ -139,7 +139,7 @@ public class UserPickerWidgetCreator extends AbstractBaseTypeWidgetCreator<User>
 		TablePickerDialogParameter parameter = getTablePickerDialogParameter();
 		TablePickerDialog dialog = new TablePickerDialog(parent.getShell(), parameter);
 		dialog.addSelectionListener(UserPickerDialogListener.ID, new UserPickerDialogListener(model));
-		return new ElementPickerComposite<TablePickerDialog>(parent, SWT.NONE, dialog);
+		return new ElementPickerComposite<TablePickerDialog>(parent, SWT.NONE, dialog, false);
 	}
 	
 	private TablePickerDialogParameter getTablePickerDialogParameter() {

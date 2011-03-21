@@ -20,7 +20,7 @@ import org.nabucco.framework.base.facade.datatype.Datatype;
 import org.nabucco.framework.base.facade.datatype.DatatypeState;
 import org.nabucco.framework.base.facade.datatype.visitor.DatatypeVisitor;
 import org.nabucco.framework.base.facade.datatype.visitor.VisitorException;
-import org.nabucco.testautomation.facade.datatype.property.PropertyList;
+import org.nabucco.testautomation.facade.datatype.property.base.PropertyComposite;
 
 
 /**
@@ -30,16 +30,16 @@ import org.nabucco.testautomation.facade.datatype.property.PropertyList;
  */
 public final class PropertyModificationVisitor extends DatatypeVisitor {
 
-    private final PropertyList list;
+    private final PropertyComposite property;
 
     /**
      * Creates a new {@link PropertyModificationVisitor} instance.
      * 
-     * @param testConfiguration
-     *            the test configuration
+     * @param property
+     *            the PropertyComposite to check for modification
      */
-    public PropertyModificationVisitor(PropertyList list) {
-        this.list = list;
+    public PropertyModificationVisitor(PropertyComposite property) {
+        this.property = property;
     }
 
     @Override
@@ -48,7 +48,7 @@ public final class PropertyModificationVisitor extends DatatypeVisitor {
         if (datatype.getDatatypeState() == DatatypeState.INITIALIZED
                 || datatype.getDatatypeState() == DatatypeState.MODIFIED
                 || datatype.getDatatypeState() == DatatypeState.DELETED) {
-        	list.setDatatypeState(DatatypeState.MODIFIED);
+        	this.property.setDatatypeState(DatatypeState.MODIFIED);
         } else {
             super.visit(datatype);
         }

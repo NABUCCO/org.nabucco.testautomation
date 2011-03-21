@@ -3,19 +3,24 @@
  */
 package org.nabucco.testautomation.facade.datatype.engine.proxy;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.nabucco.framework.base.facade.datatype.Datatype;
+import org.nabucco.framework.base.facade.datatype.Flag;
 import org.nabucco.framework.base.facade.datatype.NabuccoDatatype;
 import org.nabucco.framework.base.facade.datatype.Name;
 import org.nabucco.framework.base.facade.datatype.code.Code;
 import org.nabucco.framework.base.facade.datatype.code.CodePath;
 import org.nabucco.framework.base.facade.datatype.collection.NabuccoCollectionState;
 import org.nabucco.framework.base.facade.datatype.collection.NabuccoList;
-import org.nabucco.framework.base.facade.datatype.property.BasetypeProperty;
-import org.nabucco.framework.base.facade.datatype.property.DatatypeProperty;
-import org.nabucco.framework.base.facade.datatype.property.EnumProperty;
-import org.nabucco.framework.base.facade.datatype.property.ListProperty;
+import org.nabucco.framework.base.facade.datatype.collection.NabuccoListImpl;
 import org.nabucco.framework.base.facade.datatype.property.NabuccoProperty;
+import org.nabucco.framework.base.facade.datatype.property.NabuccoPropertyContainer;
+import org.nabucco.framework.base.facade.datatype.property.NabuccoPropertyDescriptor;
+import org.nabucco.framework.base.facade.datatype.property.PropertyAssociationType;
+import org.nabucco.framework.base.facade.datatype.property.PropertyCache;
+import org.nabucco.framework.base.facade.datatype.property.PropertyDescriptorSupport;
 import org.nabucco.testautomation.facade.datatype.engine.SubEngineType;
 import org.nabucco.testautomation.facade.datatype.engine.proxy.ConfigurationProperty;
 
@@ -29,11 +34,20 @@ public class ProxyConfiguration extends NabuccoDatatype implements Datatype {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String[] PROPERTY_NAMES = { "name", "subEngineType", "environmentType",
-            "releaseType", "configurationProperties" };
+    private static final String[] PROPERTY_CONSTRAINTS = { "l0,255;m1,1;", "m1,1;", "m0,1;",
+            "m0,1;", "l0,n;m1,1;", "m0,n;" };
 
-    private static final String[] PROPERTY_CONSTRAINTS = { "l0,n;m1,1;", "m1,1;", "m0,1;", "m0,1;",
-            "m0,n;" };
+    public static final String NAME = "name";
+
+    public static final String SUBENGINETYPE = "subEngineType";
+
+    public static final String ENVIRONMENTTYPE = "environmentType";
+
+    public static final String RELEASETYPE = "releaseType";
+
+    public static final String ENABLED = "enabled";
+
+    public static final String CONFIGURATIONPROPERTIES = "configurationProperties";
 
     private Name name;
 
@@ -53,7 +67,9 @@ public class ProxyConfiguration extends NabuccoDatatype implements Datatype {
 
     private static final String RELEASETYPE_CODEPATH = "nabucco.testautomation.release";
 
-    private List<ConfigurationProperty> configurationProperties;
+    private Flag enabled;
+
+    private NabuccoList<ConfigurationProperty> configurationProperties;
 
     /** Constructs a new ProxyConfiguration instance. */
     public ProxyConfiguration() {
@@ -88,9 +104,11 @@ public class ProxyConfiguration extends NabuccoDatatype implements Datatype {
         if ((this.getReleaseTypeRefId() != null)) {
             clone.setReleaseTypeRefId(this.getReleaseTypeRefId());
         }
-        if ((this.configurationProperties instanceof NabuccoList<?>)) {
-            clone.configurationProperties = ((NabuccoList<ConfigurationProperty>) this.configurationProperties)
-                    .cloneCollection();
+        if ((this.getEnabled() != null)) {
+            clone.setEnabled(this.getEnabled().cloneObject());
+        }
+        if ((this.configurationProperties != null)) {
+            clone.configurationProperties = this.configurationProperties.cloneCollection();
         }
     }
 
@@ -101,10 +119,11 @@ public class ProxyConfiguration extends NabuccoDatatype implements Datatype {
      */
     List<ConfigurationProperty> getConfigurationPropertiesJPA() {
         if ((this.configurationProperties == null)) {
-            this.configurationProperties = new NabuccoList<ConfigurationProperty>(
+            this.configurationProperties = new NabuccoListImpl<ConfigurationProperty>(
                     NabuccoCollectionState.LAZY);
         }
-        return ((NabuccoList<ConfigurationProperty>) this.configurationProperties).getDelegate();
+        return ((NabuccoListImpl<ConfigurationProperty>) this.configurationProperties)
+                .getDelegate();
     }
 
     /**
@@ -114,11 +133,36 @@ public class ProxyConfiguration extends NabuccoDatatype implements Datatype {
      */
     void setConfigurationPropertiesJPA(List<ConfigurationProperty> configurationProperties) {
         if ((this.configurationProperties == null)) {
-            this.configurationProperties = new NabuccoList<ConfigurationProperty>(
+            this.configurationProperties = new NabuccoListImpl<ConfigurationProperty>(
                     NabuccoCollectionState.LAZY);
         }
-        ((NabuccoList<ConfigurationProperty>) this.configurationProperties)
+        ((NabuccoListImpl<ConfigurationProperty>) this.configurationProperties)
                 .setDelegate(configurationProperties);
+    }
+
+    /**
+     * CreatePropertyContainer.
+     *
+     * @return the NabuccoPropertyContainer.
+     */
+    protected static NabuccoPropertyContainer createPropertyContainer() {
+        Map<String, NabuccoPropertyDescriptor> propertyMap = new HashMap<String, NabuccoPropertyDescriptor>();
+        propertyMap.putAll(PropertyCache.getInstance().retrieve(NabuccoDatatype.class)
+                .getPropertyMap());
+        propertyMap.put(NAME, PropertyDescriptorSupport.createBasetype(NAME, Name.class, 2,
+                PROPERTY_CONSTRAINTS[0], false));
+        propertyMap.put(SUBENGINETYPE, PropertyDescriptorSupport.createEnumeration(SUBENGINETYPE,
+                SubEngineType.class, 3, PROPERTY_CONSTRAINTS[1], false));
+        propertyMap.put(ENVIRONMENTTYPE, PropertyDescriptorSupport.createDatatype(ENVIRONMENTTYPE,
+                Code.class, 4, PROPERTY_CONSTRAINTS[2], false, PropertyAssociationType.COMPONENT));
+        propertyMap.put(RELEASETYPE, PropertyDescriptorSupport.createDatatype(RELEASETYPE,
+                Code.class, 5, PROPERTY_CONSTRAINTS[3], false, PropertyAssociationType.COMPONENT));
+        propertyMap.put(ENABLED, PropertyDescriptorSupport.createBasetype(ENABLED, Flag.class, 6,
+                PROPERTY_CONSTRAINTS[4], false));
+        propertyMap.put(CONFIGURATIONPROPERTIES, PropertyDescriptorSupport.createCollection(
+                CONFIGURATIONPROPERTIES, ConfigurationProperty.class, 7, PROPERTY_CONSTRAINTS[5],
+                false, PropertyAssociationType.COMPOSITION));
+        return new NabuccoPropertyContainer(propertyMap);
     }
 
     @Override
@@ -127,21 +171,52 @@ public class ProxyConfiguration extends NabuccoDatatype implements Datatype {
     }
 
     @Override
-    public List<NabuccoProperty<?>> getProperties() {
-        List<NabuccoProperty<?>> properties = super.getProperties();
-        properties.add(new BasetypeProperty<Name>(PROPERTY_NAMES[0], Name.class,
-                PROPERTY_CONSTRAINTS[0], this.name));
-        properties.add(new EnumProperty<SubEngineType>(PROPERTY_NAMES[1], SubEngineType.class,
-                PROPERTY_CONSTRAINTS[1], this.subEngineType));
-        properties.add(new DatatypeProperty<Code>(PROPERTY_NAMES[2], Code.class,
-                PROPERTY_CONSTRAINTS[2], this.environmentType));
-        properties.add(new DatatypeProperty<Code>(PROPERTY_NAMES[3], Code.class,
-                PROPERTY_CONSTRAINTS[3], this.releaseType));
-        properties
-                .add(new ListProperty<ConfigurationProperty>(PROPERTY_NAMES[4],
-                        ConfigurationProperty.class, PROPERTY_CONSTRAINTS[4],
-                        this.configurationProperties));
+    public List<NabuccoProperty> getProperties() {
+        List<NabuccoProperty> properties = super.getProperties();
+        properties.add(super.createProperty(ProxyConfiguration.getPropertyDescriptor(NAME),
+                this.name, null));
+        properties.add(super.createProperty(
+                ProxyConfiguration.getPropertyDescriptor(SUBENGINETYPE), this.subEngineType, null));
+        properties.add(super.createProperty(
+                ProxyConfiguration.getPropertyDescriptor(ENVIRONMENTTYPE), this.environmentType,
+                this.environmentTypeRefId));
+        properties.add(super.createProperty(ProxyConfiguration.getPropertyDescriptor(RELEASETYPE),
+                this.releaseType, this.releaseTypeRefId));
+        properties.add(super.createProperty(ProxyConfiguration.getPropertyDescriptor(ENABLED),
+                this.enabled, null));
+        properties.add(super.createProperty(
+                ProxyConfiguration.getPropertyDescriptor(CONFIGURATIONPROPERTIES),
+                this.configurationProperties, null));
         return properties;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public boolean setProperty(NabuccoProperty property) {
+        if (super.setProperty(property)) {
+            return true;
+        }
+        if ((property.getName().equals(NAME) && (property.getType() == Name.class))) {
+            this.setName(((Name) property.getInstance()));
+            return true;
+        } else if ((property.getName().equals(SUBENGINETYPE) && (property.getType() == SubEngineType.class))) {
+            this.setSubEngineType(((SubEngineType) property.getInstance()));
+            return true;
+        } else if ((property.getName().equals(ENVIRONMENTTYPE) && (property.getType() == Code.class))) {
+            this.setEnvironmentType(((Code) property.getInstance()));
+            return true;
+        } else if ((property.getName().equals(RELEASETYPE) && (property.getType() == Code.class))) {
+            this.setReleaseType(((Code) property.getInstance()));
+            return true;
+        } else if ((property.getName().equals(ENABLED) && (property.getType() == Flag.class))) {
+            this.setEnabled(((Flag) property.getInstance()));
+            return true;
+        } else if ((property.getName().equals(CONFIGURATIONPROPERTIES) && (property.getType() == ConfigurationProperty.class))) {
+            this.configurationProperties = ((NabuccoList<ConfigurationProperty>) property
+                    .getInstance());
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -189,6 +264,11 @@ public class ProxyConfiguration extends NabuccoDatatype implements Datatype {
                 return false;
         } else if ((!this.releaseTypeRefId.equals(other.releaseTypeRefId)))
             return false;
+        if ((this.enabled == null)) {
+            if ((other.enabled != null))
+                return false;
+        } else if ((!this.enabled.equals(other.enabled)))
+            return false;
         return true;
     }
 
@@ -206,24 +286,8 @@ public class ProxyConfiguration extends NabuccoDatatype implements Datatype {
         result = ((PRIME * result) + ((this.releaseType == null) ? 0 : this.releaseType.hashCode()));
         result = ((PRIME * result) + ((this.releaseTypeRefId == null) ? 0 : this.releaseTypeRefId
                 .hashCode()));
+        result = ((PRIME * result) + ((this.enabled == null) ? 0 : this.enabled.hashCode()));
         return result;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder appendable = new StringBuilder();
-        appendable.append("<ProxyConfiguration>\n");
-        appendable.append(super.toString());
-        appendable.append((("<name>" + this.name) + "</name>\n"));
-        appendable.append((("<subEngineType>" + this.subEngineType) + "</subEngineType>\n"));
-        appendable.append((("<environmentType>" + this.environmentType) + "</environmentType>\n"));
-        appendable
-                .append((("<environmentTypeRefId>" + this.environmentTypeRefId) + "</environmentTypeRefId>\n"));
-        appendable.append((("<releaseType>" + this.releaseType) + "</releaseType>\n"));
-        appendable
-                .append((("<releaseTypeRefId>" + this.releaseTypeRefId) + "</releaseTypeRefId>\n"));
-        appendable.append("</ProxyConfiguration>\n");
-        return appendable.toString();
     }
 
     @Override
@@ -258,6 +322,9 @@ public class ProxyConfiguration extends NabuccoDatatype implements Datatype {
      */
     public void setName(String name) {
         if ((this.name == null)) {
+            if ((name == null)) {
+                return;
+            }
             this.name = new Name();
         }
         this.name.setValue(name);
@@ -377,16 +444,69 @@ public class ProxyConfiguration extends NabuccoDatatype implements Datatype {
     }
 
     /**
+     * Missing description at method getEnabled.
+     *
+     * @return the Flag.
+     */
+    public Flag getEnabled() {
+        return this.enabled;
+    }
+
+    /**
+     * Missing description at method setEnabled.
+     *
+     * @param enabled the Flag.
+     */
+    public void setEnabled(Flag enabled) {
+        this.enabled = enabled;
+    }
+
+    /**
+     * Missing description at method setEnabled.
+     *
+     * @param enabled the Boolean.
+     */
+    public void setEnabled(Boolean enabled) {
+        if ((this.enabled == null)) {
+            if ((enabled == null)) {
+                return;
+            }
+            this.enabled = new Flag();
+        }
+        this.enabled.setValue(enabled);
+    }
+
+    /**
      * Missing description at method getConfigurationProperties.
      *
-     * @return the List<ConfigurationProperty>.
+     * @return the NabuccoList<ConfigurationProperty>.
      */
-    public List<ConfigurationProperty> getConfigurationProperties() {
+    public NabuccoList<ConfigurationProperty> getConfigurationProperties() {
         if ((this.configurationProperties == null)) {
-            this.configurationProperties = new NabuccoList<ConfigurationProperty>(
+            this.configurationProperties = new NabuccoListImpl<ConfigurationProperty>(
                     NabuccoCollectionState.INITIALIZED);
         }
         return this.configurationProperties;
+    }
+
+    /**
+     * Getter for the PropertyDescriptor.
+     *
+     * @param propertyName the String.
+     * @return the NabuccoPropertyDescriptor.
+     */
+    public static NabuccoPropertyDescriptor getPropertyDescriptor(String propertyName) {
+        return PropertyCache.getInstance().retrieve(ProxyConfiguration.class)
+                .getProperty(propertyName);
+    }
+
+    /**
+     * Getter for the PropertyDescriptorList.
+     *
+     * @return the List<NabuccoPropertyDescriptor>.
+     */
+    public static List<NabuccoPropertyDescriptor> getPropertyDescriptorList() {
+        return PropertyCache.getInstance().retrieve(ProxyConfiguration.class).getAllProperties();
     }
 
     /**

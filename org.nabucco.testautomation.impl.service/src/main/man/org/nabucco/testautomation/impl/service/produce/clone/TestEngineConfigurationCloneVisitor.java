@@ -18,7 +18,9 @@ package org.nabucco.testautomation.impl.service.produce.clone;
 
 import org.nabucco.framework.base.facade.datatype.Datatype;
 import org.nabucco.framework.base.facade.datatype.DatatypeState;
+import org.nabucco.framework.base.facade.datatype.Identifier;
 import org.nabucco.framework.base.facade.datatype.NabuccoDatatype;
+import org.nabucco.framework.base.facade.datatype.Version;
 import org.nabucco.framework.base.facade.datatype.visitor.VisitorException;
 import org.nabucco.testautomation.facade.datatype.engine.TestEngineConfiguration;
 import org.nabucco.testautomation.facade.datatype.engine.proxy.ConfigurationProperty;
@@ -70,8 +72,8 @@ public class TestEngineConfigurationCloneVisitor extends TestEngineConfiguration
 
 	private void resetDatatype(NabuccoDatatype datatype) {
 		datatype.setDatatypeState(DatatypeState.INITIALIZED);
-		datatype.setVersion(null);
-		datatype.setId(null);
+        datatype.setVersion((Version) null);
+        datatype.setId((Identifier) null);
 	}
 
 }

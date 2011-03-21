@@ -3,7 +3,7 @@
  */
 package org.nabucco.testautomation.ui.web.communication.search;
 
-import org.nabucco.framework.base.facade.datatype.security.Subject;
+import org.nabucco.framework.base.facade.datatype.session.NabuccoSession;
 import org.nabucco.framework.base.facade.exception.service.SearchException;
 import org.nabucco.framework.base.facade.message.EmptyServiceMessage;
 import org.nabucco.framework.base.facade.message.ServiceRequest;
@@ -40,37 +40,15 @@ public class SearchTestEngineConfigurationDelegate extends ServiceDelegateSuppor
     /**
      * SearchTestEngineConfiguration.
      *
+     * @param session the NabuccoSession.
      * @param rq the TestEngineConfigurationSearchMsg.
      * @return the TestEngineConfigurationListMsg.
      * @throws SearchException
      */
     public TestEngineConfigurationListMsg searchTestEngineConfiguration(
-            TestEngineConfigurationSearchMsg rq) throws SearchException {
+            TestEngineConfigurationSearchMsg rq, NabuccoSession session) throws SearchException {
         ServiceRequest<TestEngineConfigurationSearchMsg> request = new ServiceRequest<TestEngineConfigurationSearchMsg>(
-                super.createServiceContext());
-        request.setRequestMessage(rq);
-        ServiceResponse<TestEngineConfigurationListMsg> rs;
-        if ((service != null)) {
-            rs = service.searchTestEngineConfiguration(request);
-        } else {
-            throw new SearchException(
-                    "Cannot execute service operation: SearchTestEngineConfiguration.searchTestEngineConfiguration");
-        }
-        return rs.getResponseMessage();
-    }
-
-    /**
-     * SearchTestEngineConfiguration.
-     *
-     * @param subject the Subject.
-     * @param rq the TestEngineConfigurationSearchMsg.
-     * @return the TestEngineConfigurationListMsg.
-     * @throws SearchException
-     */
-    public TestEngineConfigurationListMsg searchTestEngineConfiguration(
-            TestEngineConfigurationSearchMsg rq, Subject subject) throws SearchException {
-        ServiceRequest<TestEngineConfigurationSearchMsg> request = new ServiceRequest<TestEngineConfigurationSearchMsg>(
-                super.createServiceContext(subject));
+                super.createServiceContext(session));
         request.setRequestMessage(rq);
         ServiceResponse<TestEngineConfigurationListMsg> rs;
         if ((service != null)) {
@@ -85,37 +63,15 @@ public class SearchTestEngineConfigurationDelegate extends ServiceDelegateSuppor
     /**
      * Getter for the TestEngineConfiguration.
      *
-     * @param rq the TestEngineConfigurationSearchMsg.
-     * @return the TestEngineConfigurationMsg.
-     * @throws SearchException
-     */
-    public TestEngineConfigurationMsg getTestEngineConfiguration(TestEngineConfigurationSearchMsg rq)
-            throws SearchException {
-        ServiceRequest<TestEngineConfigurationSearchMsg> request = new ServiceRequest<TestEngineConfigurationSearchMsg>(
-                super.createServiceContext());
-        request.setRequestMessage(rq);
-        ServiceResponse<TestEngineConfigurationMsg> rs;
-        if ((service != null)) {
-            rs = service.getTestEngineConfiguration(request);
-        } else {
-            throw new SearchException(
-                    "Cannot execute service operation: SearchTestEngineConfiguration.getTestEngineConfiguration");
-        }
-        return rs.getResponseMessage();
-    }
-
-    /**
-     * Getter for the TestEngineConfiguration.
-     *
-     * @param subject the Subject.
+     * @param session the NabuccoSession.
      * @param rq the TestEngineConfigurationSearchMsg.
      * @return the TestEngineConfigurationMsg.
      * @throws SearchException
      */
     public TestEngineConfigurationMsg getTestEngineConfiguration(
-            TestEngineConfigurationSearchMsg rq, Subject subject) throws SearchException {
+            TestEngineConfigurationSearchMsg rq, NabuccoSession session) throws SearchException {
         ServiceRequest<TestEngineConfigurationSearchMsg> request = new ServiceRequest<TestEngineConfigurationSearchMsg>(
-                super.createServiceContext(subject));
+                super.createServiceContext(session));
         request.setRequestMessage(rq);
         ServiceResponse<TestEngineConfigurationMsg> rs;
         if ((service != null)) {
@@ -130,37 +86,15 @@ public class SearchTestEngineConfigurationDelegate extends ServiceDelegateSuppor
     /**
      * SearchProxyConfiguration.
      *
-     * @param rq the EmptyServiceMessage.
-     * @return the ProxyConfigurationListMsg.
-     * @throws SearchException
-     */
-    public ProxyConfigurationListMsg searchProxyConfiguration(EmptyServiceMessage rq)
-            throws SearchException {
-        ServiceRequest<EmptyServiceMessage> request = new ServiceRequest<EmptyServiceMessage>(
-                super.createServiceContext());
-        request.setRequestMessage(rq);
-        ServiceResponse<ProxyConfigurationListMsg> rs;
-        if ((service != null)) {
-            rs = service.searchProxyConfiguration(request);
-        } else {
-            throw new SearchException(
-                    "Cannot execute service operation: SearchTestEngineConfiguration.searchProxyConfiguration");
-        }
-        return rs.getResponseMessage();
-    }
-
-    /**
-     * SearchProxyConfiguration.
-     *
-     * @param subject the Subject.
+     * @param session the NabuccoSession.
      * @param rq the EmptyServiceMessage.
      * @return the ProxyConfigurationListMsg.
      * @throws SearchException
      */
     public ProxyConfigurationListMsg searchProxyConfiguration(EmptyServiceMessage rq,
-            Subject subject) throws SearchException {
+            NabuccoSession session) throws SearchException {
         ServiceRequest<EmptyServiceMessage> request = new ServiceRequest<EmptyServiceMessage>(
-                super.createServiceContext(subject));
+                super.createServiceContext(session));
         request.setRequestMessage(rq);
         ServiceResponse<ProxyConfigurationListMsg> rs;
         if ((service != null)) {
@@ -175,37 +109,15 @@ public class SearchTestEngineConfigurationDelegate extends ServiceDelegateSuppor
     /**
      * Getter for the ProxyConfiguration.
      *
-     * @param rq the ProxyConfigurationSearchMsg.
-     * @return the ProxyConfigurationMsg.
-     * @throws SearchException
-     */
-    public ProxyConfigurationMsg getProxyConfiguration(ProxyConfigurationSearchMsg rq)
-            throws SearchException {
-        ServiceRequest<ProxyConfigurationSearchMsg> request = new ServiceRequest<ProxyConfigurationSearchMsg>(
-                super.createServiceContext());
-        request.setRequestMessage(rq);
-        ServiceResponse<ProxyConfigurationMsg> rs;
-        if ((service != null)) {
-            rs = service.getProxyConfiguration(request);
-        } else {
-            throw new SearchException(
-                    "Cannot execute service operation: SearchTestEngineConfiguration.getProxyConfiguration");
-        }
-        return rs.getResponseMessage();
-    }
-
-    /**
-     * Getter for the ProxyConfiguration.
-     *
-     * @param subject the Subject.
+     * @param session the NabuccoSession.
      * @param rq the ProxyConfigurationSearchMsg.
      * @return the ProxyConfigurationMsg.
      * @throws SearchException
      */
     public ProxyConfigurationMsg getProxyConfiguration(ProxyConfigurationSearchMsg rq,
-            Subject subject) throws SearchException {
+            NabuccoSession session) throws SearchException {
         ServiceRequest<ProxyConfigurationSearchMsg> request = new ServiceRequest<ProxyConfigurationSearchMsg>(
-                super.createServiceContext(subject));
+                super.createServiceContext(session));
         request.setRequestMessage(rq);
         ServiceResponse<ProxyConfigurationMsg> rs;
         if ((service != null)) {

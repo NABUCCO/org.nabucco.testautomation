@@ -3,7 +3,7 @@
  */
 package org.nabucco.testautomation.ui.web.communication.search;
 
-import org.nabucco.framework.base.facade.datatype.security.Subject;
+import org.nabucco.framework.base.facade.datatype.session.NabuccoSession;
 import org.nabucco.framework.base.facade.exception.service.SearchException;
 import org.nabucco.framework.base.facade.message.ServiceRequest;
 import org.nabucco.framework.base.facade.message.ServiceResponse;
@@ -35,36 +35,15 @@ public class SearchPropertyDelegate extends ServiceDelegateSupport {
     /**
      * SearchProperty.
      *
+     * @param session the NabuccoSession.
      * @param rq the PropertySearchMsg.
      * @return the PropertyListMsg.
      * @throws SearchException
      */
-    public PropertyListMsg searchProperty(PropertySearchMsg rq) throws SearchException {
-        ServiceRequest<PropertySearchMsg> request = new ServiceRequest<PropertySearchMsg>(
-                super.createServiceContext());
-        request.setRequestMessage(rq);
-        ServiceResponse<PropertyListMsg> rs;
-        if ((service != null)) {
-            rs = service.searchProperty(request);
-        } else {
-            throw new SearchException(
-                    "Cannot execute service operation: SearchProperty.searchProperty");
-        }
-        return rs.getResponseMessage();
-    }
-
-    /**
-     * SearchProperty.
-     *
-     * @param subject the Subject.
-     * @param rq the PropertySearchMsg.
-     * @return the PropertyListMsg.
-     * @throws SearchException
-     */
-    public PropertyListMsg searchProperty(PropertySearchMsg rq, Subject subject)
+    public PropertyListMsg searchProperty(PropertySearchMsg rq, NabuccoSession session)
             throws SearchException {
         ServiceRequest<PropertySearchMsg> request = new ServiceRequest<PropertySearchMsg>(
-                super.createServiceContext(subject));
+                super.createServiceContext(session));
         request.setRequestMessage(rq);
         ServiceResponse<PropertyListMsg> rs;
         if ((service != null)) {

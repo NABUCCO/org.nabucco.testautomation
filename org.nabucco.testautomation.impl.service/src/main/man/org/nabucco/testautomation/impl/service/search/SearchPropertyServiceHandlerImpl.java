@@ -21,7 +21,10 @@ import java.util.List;
 
 import javax.persistence.Query;
 
+import org.nabucco.framework.base.facade.component.NabuccoInstance;
 import org.nabucco.framework.base.facade.datatype.DatatypeState;
+import org.nabucco.framework.base.facade.datatype.validation.constraint.element.ConstraintFactory;
+import org.nabucco.framework.base.facade.datatype.visitor.VisitorException;
 import org.nabucco.framework.base.facade.exception.service.SearchException;
 import org.nabucco.testautomation.facade.datatype.comparator.PropertySorter;
 import org.nabucco.testautomation.facade.datatype.property.base.Property;
@@ -48,10 +51,14 @@ public class SearchPropertyServiceHandlerImpl extends SearchPropertyServiceHandl
 			throws SearchException {
 
 		StringBuilder queryString = new StringBuilder();
-		queryString.append("select p from Property p");
+		queryString.append("FROM Property p");
 
 		List<String> filter = new ArrayList<String>();
         
+		if (msg.getOwner() != null && msg.getOwner().getValue() != null) {
+			filter.add("p.owner = :owner");
+		}
+		
 		if (msg.getPropertyId() != null && msg.getPropertyId().getValue() != null) {
 			filter.add("p.id = :id");
 		} else {
@@ -85,6 +92,10 @@ public class SearchPropertyServiceHandlerImpl extends SearchPropertyServiceHandl
 		Query query = super.getEntityManager().createQuery(
 				queryString.toString());
 		
+		if (msg.getOwner() != null && msg.getOwner().getValue() != null) {
+			query.setParameter("owner", msg.getOwner());
+		}
+		
 		if (msg.getPropertyId() != null && msg.getPropertyId().getValue() != null) {
 			query.setParameter("id", msg.getPropertyId().getValue());
 		} else {
@@ -112,6 +123,16 @@ public class SearchPropertyServiceHandlerImpl extends SearchPropertyServiceHandl
 			this.getEntityManager().clear();
 			
 			for (Property property : resultList) {
+				
+				// Check owner and set Editable-Constraint
+				if (!property.getOwner().equals(NabuccoInstance.getInstance().getOwner())) {
+					try {
+						property.addConstraint(ConstraintFactory.getInstance()
+								.createEditableConstraint(false), true);
+					} catch (VisitorException ex) {
+						throw new SearchException(ex);
+					}
+				}
 				propertySorter.sort(property);
 			}
 			rs.getPropertyList().addAll(resultList);

@@ -3,7 +3,12 @@
  */
 package org.nabucco.testautomation.facade.datatype.property.base;
 
+import java.util.Collections;
+import java.util.List;
 import org.nabucco.framework.base.facade.datatype.Enumeration;
+import org.nabucco.framework.base.facade.datatype.property.NabuccoProperty;
+import org.nabucco.framework.base.facade.datatype.visitor.Visitor;
+import org.nabucco.framework.base.facade.datatype.visitor.VisitorException;
 
 /**
  * PropertyUsageType<p/>Enumeration indicating the type of usage of a PropertyList.<p/>
@@ -42,5 +47,14 @@ public enum PropertyUsageType implements Enumeration {
     @Override
     public Enumeration cloneObject() {
         return this;
+    }
+
+    @Override
+    public void accept(Visitor visitor) throws VisitorException {
+    }
+
+    @Override
+    public List<NabuccoProperty> getProperties() {
+        return Collections.emptyList();
     }
 }

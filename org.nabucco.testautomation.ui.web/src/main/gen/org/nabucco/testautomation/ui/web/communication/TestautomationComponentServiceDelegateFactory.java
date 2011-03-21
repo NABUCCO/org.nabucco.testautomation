@@ -11,6 +11,8 @@ import org.nabucco.framework.base.facade.exception.client.ClientException;
 import org.nabucco.framework.base.facade.exception.service.ServiceException;
 import org.nabucco.testautomation.facade.component.TestautomationComponent;
 import org.nabucco.testautomation.facade.component.TestautomationComponentLocator;
+import org.nabucco.testautomation.ui.web.communication.export.ExportTestautomationDelegate;
+import org.nabucco.testautomation.ui.web.communication.importing.ImportTestautomationDelegate;
 import org.nabucco.testautomation.ui.web.communication.maintain.MaintainPropertyDelegate;
 import org.nabucco.testautomation.ui.web.communication.maintain.MaintainTestEngineConfigurationDelegate;
 import org.nabucco.testautomation.ui.web.communication.produce.ProducePropertyDelegate;
@@ -41,6 +43,10 @@ public class TestautomationComponentServiceDelegateFactory {
     private ProduceTestEngineConfigurationDelegate produceTestEngineConfigurationDelegate;
 
     private SearchTestEngineConfigurationDelegate searchTestEngineConfigurationDelegate;
+
+    private ExportTestautomationDelegate exportTestautomationDelegate;
+
+    private ImportTestautomationDelegate importTestautomationDelegate;
 
     /** Constructs a new TestautomationComponentServiceDelegateFactory instance. */
     private TestautomationComponentServiceDelegateFactory() {
@@ -189,6 +195,46 @@ public class TestautomationComponentServiceDelegateFactory {
             return this.searchTestEngineConfigurationDelegate;
         } catch (ConnectionException e) {
             throw new ClientException("Cannot locate service: SearchTestEngineConfiguration", e);
+        } catch (ServiceException e) {
+            throw new ClientException("Cannot locate service: ServiceDelegateTemplate", e);
+        }
+    }
+
+    /**
+     * Getter for the ExportTestautomation.
+     *
+     * @return the ExportTestautomationDelegate.
+     * @throws ClientException
+     */
+    public ExportTestautomationDelegate getExportTestautomation() throws ClientException {
+        try {
+            if ((this.exportTestautomationDelegate == null)) {
+                this.exportTestautomationDelegate = new ExportTestautomationDelegate(this
+                        .getComponent().getExportTestautomation());
+            }
+            return this.exportTestautomationDelegate;
+        } catch (ConnectionException e) {
+            throw new ClientException("Cannot locate service: ExportTestautomation", e);
+        } catch (ServiceException e) {
+            throw new ClientException("Cannot locate service: ServiceDelegateTemplate", e);
+        }
+    }
+
+    /**
+     * Getter for the ImportTestautomation.
+     *
+     * @return the ImportTestautomationDelegate.
+     * @throws ClientException
+     */
+    public ImportTestautomationDelegate getImportTestautomation() throws ClientException {
+        try {
+            if ((this.importTestautomationDelegate == null)) {
+                this.importTestautomationDelegate = new ImportTestautomationDelegate(this
+                        .getComponent().getImportTestautomation());
+            }
+            return this.importTestautomationDelegate;
+        } catch (ConnectionException e) {
+            throw new ClientException("Cannot locate service: ImportTestautomation", e);
         } catch (ServiceException e) {
             throw new ClientException("Cannot locate service: ServiceDelegateTemplate", e);
         }

@@ -3,15 +3,19 @@
  */
 package org.nabucco.testautomation.facade.datatype.engine;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.nabucco.framework.base.facade.datatype.Datatype;
 import org.nabucco.framework.base.facade.datatype.DateTime;
 import org.nabucco.framework.base.facade.datatype.Identifier;
 import org.nabucco.framework.base.facade.datatype.NabuccoDatatype;
 import org.nabucco.framework.base.facade.datatype.Percentage;
-import org.nabucco.framework.base.facade.datatype.property.BasetypeProperty;
-import org.nabucco.framework.base.facade.datatype.property.EnumProperty;
 import org.nabucco.framework.base.facade.datatype.property.NabuccoProperty;
+import org.nabucco.framework.base.facade.datatype.property.NabuccoPropertyContainer;
+import org.nabucco.framework.base.facade.datatype.property.NabuccoPropertyDescriptor;
+import org.nabucco.framework.base.facade.datatype.property.PropertyCache;
+import org.nabucco.framework.base.facade.datatype.property.PropertyDescriptorSupport;
 import org.nabucco.testautomation.facade.datatype.engine.ExecutionStatusType;
 
 /**
@@ -24,11 +28,22 @@ public class TestExecutionInfo extends NabuccoDatatype implements Datatype {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String[] PROPERTY_NAMES = { "jobId", "startTime", "stopTime",
-            "percentCompleted", "currentTestScriptId", "currentTestScriptElementId", "testStatus" };
-
     private static final String[] PROPERTY_CONSTRAINTS = { "l0,n;m1,1;", "l0,n;m0,1;",
             "l0,n;m0,1;", "l0,n;m0,1;", "l0,n;m0,1;", "l0,n;m0,1;", "m1,1;" };
+
+    public static final String JOBID = "jobId";
+
+    public static final String STARTTIME = "startTime";
+
+    public static final String STOPTIME = "stopTime";
+
+    public static final String PERCENTCOMPLETED = "percentCompleted";
+
+    public static final String CURRENTTESTSCRIPTID = "currentTestScriptId";
+
+    public static final String CURRENTTESTSCRIPTELEMENTID = "currentTestScriptElementId";
+
+    public static final String TESTSTATUS = "testStatus";
 
     private Identifier jobId;
 
@@ -82,29 +97,88 @@ public class TestExecutionInfo extends NabuccoDatatype implements Datatype {
         clone.setTestStatus(this.getTestStatus());
     }
 
+    /**
+     * CreatePropertyContainer.
+     *
+     * @return the NabuccoPropertyContainer.
+     */
+    protected static NabuccoPropertyContainer createPropertyContainer() {
+        Map<String, NabuccoPropertyDescriptor> propertyMap = new HashMap<String, NabuccoPropertyDescriptor>();
+        propertyMap.putAll(PropertyCache.getInstance().retrieve(NabuccoDatatype.class)
+                .getPropertyMap());
+        propertyMap.put(JOBID, PropertyDescriptorSupport.createBasetype(JOBID, Identifier.class, 2,
+                PROPERTY_CONSTRAINTS[0], false));
+        propertyMap.put(STARTTIME, PropertyDescriptorSupport.createBasetype(STARTTIME,
+                DateTime.class, 3, PROPERTY_CONSTRAINTS[1], false));
+        propertyMap.put(STOPTIME, PropertyDescriptorSupport.createBasetype(STOPTIME,
+                DateTime.class, 4, PROPERTY_CONSTRAINTS[2], false));
+        propertyMap.put(PERCENTCOMPLETED, PropertyDescriptorSupport.createBasetype(
+                PERCENTCOMPLETED, Percentage.class, 5, PROPERTY_CONSTRAINTS[3], false));
+        propertyMap.put(CURRENTTESTSCRIPTID, PropertyDescriptorSupport.createBasetype(
+                CURRENTTESTSCRIPTID, Identifier.class, 6, PROPERTY_CONSTRAINTS[4], false));
+        propertyMap.put(CURRENTTESTSCRIPTELEMENTID, PropertyDescriptorSupport.createBasetype(
+                CURRENTTESTSCRIPTELEMENTID, Identifier.class, 7, PROPERTY_CONSTRAINTS[5], false));
+        propertyMap.put(TESTSTATUS, PropertyDescriptorSupport.createEnumeration(TESTSTATUS,
+                ExecutionStatusType.class, 8, PROPERTY_CONSTRAINTS[6], false));
+        return new NabuccoPropertyContainer(propertyMap);
+    }
+
     @Override
     public void init() {
         this.initDefaults();
     }
 
     @Override
-    public List<NabuccoProperty<?>> getProperties() {
-        List<NabuccoProperty<?>> properties = super.getProperties();
-        properties.add(new BasetypeProperty<Identifier>(PROPERTY_NAMES[0], Identifier.class,
-                PROPERTY_CONSTRAINTS[0], this.jobId));
-        properties.add(new BasetypeProperty<DateTime>(PROPERTY_NAMES[1], DateTime.class,
-                PROPERTY_CONSTRAINTS[1], this.startTime));
-        properties.add(new BasetypeProperty<DateTime>(PROPERTY_NAMES[2], DateTime.class,
-                PROPERTY_CONSTRAINTS[2], this.stopTime));
-        properties.add(new BasetypeProperty<Percentage>(PROPERTY_NAMES[3], Percentage.class,
-                PROPERTY_CONSTRAINTS[3], this.percentCompleted));
-        properties.add(new BasetypeProperty<Identifier>(PROPERTY_NAMES[4], Identifier.class,
-                PROPERTY_CONSTRAINTS[4], this.currentTestScriptId));
-        properties.add(new BasetypeProperty<Identifier>(PROPERTY_NAMES[5], Identifier.class,
-                PROPERTY_CONSTRAINTS[5], this.currentTestScriptElementId));
-        properties.add(new EnumProperty<ExecutionStatusType>(PROPERTY_NAMES[6],
-                ExecutionStatusType.class, PROPERTY_CONSTRAINTS[6], this.testStatus));
+    public List<NabuccoProperty> getProperties() {
+        List<NabuccoProperty> properties = super.getProperties();
+        properties.add(super.createProperty(TestExecutionInfo.getPropertyDescriptor(JOBID),
+                this.jobId, null));
+        properties.add(super.createProperty(TestExecutionInfo.getPropertyDescriptor(STARTTIME),
+                this.startTime, null));
+        properties.add(super.createProperty(TestExecutionInfo.getPropertyDescriptor(STOPTIME),
+                this.stopTime, null));
+        properties.add(super.createProperty(
+                TestExecutionInfo.getPropertyDescriptor(PERCENTCOMPLETED), this.percentCompleted,
+                null));
+        properties.add(super.createProperty(
+                TestExecutionInfo.getPropertyDescriptor(CURRENTTESTSCRIPTID),
+                this.currentTestScriptId, null));
+        properties.add(super.createProperty(
+                TestExecutionInfo.getPropertyDescriptor(CURRENTTESTSCRIPTELEMENTID),
+                this.currentTestScriptElementId, null));
+        properties.add(super.createProperty(TestExecutionInfo.getPropertyDescriptor(TESTSTATUS),
+                this.testStatus, null));
         return properties;
+    }
+
+    @Override
+    public boolean setProperty(NabuccoProperty property) {
+        if (super.setProperty(property)) {
+            return true;
+        }
+        if ((property.getName().equals(JOBID) && (property.getType() == Identifier.class))) {
+            this.setJobId(((Identifier) property.getInstance()));
+            return true;
+        } else if ((property.getName().equals(STARTTIME) && (property.getType() == DateTime.class))) {
+            this.setStartTime(((DateTime) property.getInstance()));
+            return true;
+        } else if ((property.getName().equals(STOPTIME) && (property.getType() == DateTime.class))) {
+            this.setStopTime(((DateTime) property.getInstance()));
+            return true;
+        } else if ((property.getName().equals(PERCENTCOMPLETED) && (property.getType() == Percentage.class))) {
+            this.setPercentCompleted(((Percentage) property.getInstance()));
+            return true;
+        } else if ((property.getName().equals(CURRENTTESTSCRIPTID) && (property.getType() == Identifier.class))) {
+            this.setCurrentTestScriptId(((Identifier) property.getInstance()));
+            return true;
+        } else if ((property.getName().equals(CURRENTTESTSCRIPTELEMENTID) && (property.getType() == Identifier.class))) {
+            this.setCurrentTestScriptElementId(((Identifier) property.getInstance()));
+            return true;
+        } else if ((property.getName().equals(TESTSTATUS) && (property.getType() == ExecutionStatusType.class))) {
+            this.setTestStatus(((ExecutionStatusType) property.getInstance()));
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -178,25 +252,6 @@ public class TestExecutionInfo extends NabuccoDatatype implements Datatype {
     }
 
     @Override
-    public String toString() {
-        StringBuilder appendable = new StringBuilder();
-        appendable.append("<TestExecutionInfo>\n");
-        appendable.append(super.toString());
-        appendable.append((("<jobId>" + this.jobId) + "</jobId>\n"));
-        appendable.append((("<startTime>" + this.startTime) + "</startTime>\n"));
-        appendable.append((("<stopTime>" + this.stopTime) + "</stopTime>\n"));
-        appendable
-                .append((("<percentCompleted>" + this.percentCompleted) + "</percentCompleted>\n"));
-        appendable
-                .append((("<currentTestScriptId>" + this.currentTestScriptId) + "</currentTestScriptId>\n"));
-        appendable
-                .append((("<currentTestScriptElementId>" + this.currentTestScriptElementId) + "</currentTestScriptElementId>\n"));
-        appendable.append((("<testStatus>" + this.testStatus) + "</testStatus>\n"));
-        appendable.append("</TestExecutionInfo>\n");
-        return appendable.toString();
-    }
-
-    @Override
     public TestExecutionInfo cloneObject() {
         TestExecutionInfo clone = new TestExecutionInfo();
         this.cloneObject(clone);
@@ -228,6 +283,9 @@ public class TestExecutionInfo extends NabuccoDatatype implements Datatype {
      */
     public void setJobId(Long jobId) {
         if ((this.jobId == null)) {
+            if ((jobId == null)) {
+                return;
+            }
             this.jobId = new Identifier();
         }
         this.jobId.setValue(jobId);
@@ -258,6 +316,9 @@ public class TestExecutionInfo extends NabuccoDatatype implements Datatype {
      */
     public void setStartTime(Long startTime) {
         if ((this.startTime == null)) {
+            if ((startTime == null)) {
+                return;
+            }
             this.startTime = new DateTime();
         }
         this.startTime.setValue(startTime);
@@ -288,6 +349,9 @@ public class TestExecutionInfo extends NabuccoDatatype implements Datatype {
      */
     public void setStopTime(Long stopTime) {
         if ((this.stopTime == null)) {
+            if ((stopTime == null)) {
+                return;
+            }
             this.stopTime = new DateTime();
         }
         this.stopTime.setValue(stopTime);
@@ -318,6 +382,9 @@ public class TestExecutionInfo extends NabuccoDatatype implements Datatype {
      */
     public void setPercentCompleted(Float percentCompleted) {
         if ((this.percentCompleted == null)) {
+            if ((percentCompleted == null)) {
+                return;
+            }
             this.percentCompleted = new Percentage();
         }
         this.percentCompleted.setValue(percentCompleted);
@@ -348,6 +415,9 @@ public class TestExecutionInfo extends NabuccoDatatype implements Datatype {
      */
     public void setCurrentTestScriptId(Long currentTestScriptId) {
         if ((this.currentTestScriptId == null)) {
+            if ((currentTestScriptId == null)) {
+                return;
+            }
             this.currentTestScriptId = new Identifier();
         }
         this.currentTestScriptId.setValue(currentTestScriptId);
@@ -378,6 +448,9 @@ public class TestExecutionInfo extends NabuccoDatatype implements Datatype {
      */
     public void setCurrentTestScriptElementId(Long currentTestScriptElementId) {
         if ((this.currentTestScriptElementId == null)) {
+            if ((currentTestScriptElementId == null)) {
+                return;
+            }
             this.currentTestScriptElementId = new Identifier();
         }
         this.currentTestScriptElementId.setValue(currentTestScriptElementId);
@@ -412,5 +485,25 @@ public class TestExecutionInfo extends NabuccoDatatype implements Datatype {
         } else {
             this.testStatus = ExecutionStatusType.valueOf(testStatus);
         }
+    }
+
+    /**
+     * Getter for the PropertyDescriptor.
+     *
+     * @param propertyName the String.
+     * @return the NabuccoPropertyDescriptor.
+     */
+    public static NabuccoPropertyDescriptor getPropertyDescriptor(String propertyName) {
+        return PropertyCache.getInstance().retrieve(TestExecutionInfo.class)
+                .getProperty(propertyName);
+    }
+
+    /**
+     * Getter for the PropertyDescriptorList.
+     *
+     * @return the List<NabuccoPropertyDescriptor>.
+     */
+    public static List<NabuccoPropertyDescriptor> getPropertyDescriptorList() {
+        return PropertyCache.getInstance().retrieve(TestExecutionInfo.class).getAllProperties();
     }
 }

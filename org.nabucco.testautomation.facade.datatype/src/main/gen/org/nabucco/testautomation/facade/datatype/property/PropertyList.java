@@ -3,12 +3,16 @@
  */
 package org.nabucco.testautomation.facade.datatype.property;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.nabucco.framework.base.facade.datatype.Datatype;
 import org.nabucco.framework.base.facade.datatype.Flag;
-import org.nabucco.framework.base.facade.datatype.property.BasetypeProperty;
-import org.nabucco.framework.base.facade.datatype.property.EnumProperty;
 import org.nabucco.framework.base.facade.datatype.property.NabuccoProperty;
+import org.nabucco.framework.base.facade.datatype.property.NabuccoPropertyContainer;
+import org.nabucco.framework.base.facade.datatype.property.NabuccoPropertyDescriptor;
+import org.nabucco.framework.base.facade.datatype.property.PropertyCache;
+import org.nabucco.framework.base.facade.datatype.property.PropertyDescriptorSupport;
 import org.nabucco.testautomation.facade.datatype.property.base.PropertyComposite;
 import org.nabucco.testautomation.facade.datatype.property.base.PropertyType;
 import org.nabucco.testautomation.facade.datatype.property.base.PropertyUsageType;
@@ -23,9 +27,11 @@ public class PropertyList extends PropertyComposite implements Datatype {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String[] PROPERTY_NAMES = { "reused", "usageType" };
-
     private static final String[] PROPERTY_CONSTRAINTS = { "l0,n;m1,1;", "m0,1;" };
+
+    public static final String REUSED = "reused";
+
+    public static final String USAGETYPE = "usageType";
 
     private Flag reused;
 
@@ -56,19 +62,50 @@ public class PropertyList extends PropertyComposite implements Datatype {
         clone.setUsageType(this.getUsageType());
     }
 
+    /**
+     * CreatePropertyContainer.
+     *
+     * @return the NabuccoPropertyContainer.
+     */
+    protected static NabuccoPropertyContainer createPropertyContainer() {
+        Map<String, NabuccoPropertyDescriptor> propertyMap = new HashMap<String, NabuccoPropertyDescriptor>();
+        propertyMap.putAll(PropertyCache.getInstance().retrieve(PropertyComposite.class)
+                .getPropertyMap());
+        propertyMap.put(REUSED, PropertyDescriptorSupport.createBasetype(REUSED, Flag.class, 9,
+                PROPERTY_CONSTRAINTS[0], false));
+        propertyMap.put(USAGETYPE, PropertyDescriptorSupport.createEnumeration(USAGETYPE,
+                PropertyUsageType.class, 10, PROPERTY_CONSTRAINTS[1], false));
+        return new NabuccoPropertyContainer(propertyMap);
+    }
+
     @Override
     public void init() {
         this.initDefaults();
     }
 
     @Override
-    public List<NabuccoProperty<?>> getProperties() {
-        List<NabuccoProperty<?>> properties = super.getProperties();
-        properties.add(new BasetypeProperty<Flag>(PROPERTY_NAMES[0], Flag.class,
-                PROPERTY_CONSTRAINTS[0], this.reused));
-        properties.add(new EnumProperty<PropertyUsageType>(PROPERTY_NAMES[1],
-                PropertyUsageType.class, PROPERTY_CONSTRAINTS[1], this.usageType));
+    public List<NabuccoProperty> getProperties() {
+        List<NabuccoProperty> properties = super.getProperties();
+        properties.add(super.createProperty(PropertyList.getPropertyDescriptor(REUSED),
+                this.reused, null));
+        properties.add(super.createProperty(PropertyList.getPropertyDescriptor(USAGETYPE),
+                this.usageType, null));
         return properties;
+    }
+
+    @Override
+    public boolean setProperty(NabuccoProperty property) {
+        if (super.setProperty(property)) {
+            return true;
+        }
+        if ((property.getName().equals(REUSED) && (property.getType() == Flag.class))) {
+            this.setReused(((Flag) property.getInstance()));
+            return true;
+        } else if ((property.getName().equals(USAGETYPE) && (property.getType() == PropertyUsageType.class))) {
+            this.setUsageType(((PropertyUsageType) property.getInstance()));
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -109,17 +146,6 @@ public class PropertyList extends PropertyComposite implements Datatype {
     }
 
     @Override
-    public String toString() {
-        StringBuilder appendable = new StringBuilder();
-        appendable.append("<PropertyList>\n");
-        appendable.append(super.toString());
-        appendable.append((("<reused>" + this.reused) + "</reused>\n"));
-        appendable.append((("<usageType>" + this.usageType) + "</usageType>\n"));
-        appendable.append("</PropertyList>\n");
-        return appendable.toString();
-    }
-
-    @Override
     public PropertyList cloneObject() {
         PropertyList clone = new PropertyList();
         this.cloneObject(clone);
@@ -151,6 +177,9 @@ public class PropertyList extends PropertyComposite implements Datatype {
      */
     public void setReused(Boolean reused) {
         if ((this.reused == null)) {
+            if ((reused == null)) {
+                return;
+            }
             this.reused = new Flag();
         }
         this.reused.setValue(reused);
@@ -185,5 +214,24 @@ public class PropertyList extends PropertyComposite implements Datatype {
         } else {
             this.usageType = PropertyUsageType.valueOf(usageType);
         }
+    }
+
+    /**
+     * Getter for the PropertyDescriptor.
+     *
+     * @param propertyName the String.
+     * @return the NabuccoPropertyDescriptor.
+     */
+    public static NabuccoPropertyDescriptor getPropertyDescriptor(String propertyName) {
+        return PropertyCache.getInstance().retrieve(PropertyList.class).getProperty(propertyName);
+    }
+
+    /**
+     * Getter for the PropertyDescriptorList.
+     *
+     * @return the List<NabuccoPropertyDescriptor>.
+     */
+    public static List<NabuccoPropertyDescriptor> getPropertyDescriptorList() {
+        return PropertyCache.getInstance().retrieve(PropertyList.class).getAllProperties();
     }
 }

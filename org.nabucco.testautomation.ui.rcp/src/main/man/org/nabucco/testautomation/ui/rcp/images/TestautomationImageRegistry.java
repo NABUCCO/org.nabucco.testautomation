@@ -30,8 +30,30 @@ public enum TestautomationImageRegistry {
 
 	ICON_ENGINE("icons/testautomation/engine.png", "/icons/engine.png"),
 	
-	ICON_PROXY("icons/testautomation/proxy.png", "/icons/proxy.png");
+	ICON_PROXY("icons/testautomation/proxy.png", "/icons/proxy.png"),
 
+	ICON_PROXY_DISABLED("icons/testautomation/disabled.png", "/icons/disabled.png"),
+	
+	ICON_PROPERTY("icons/text.png", "icons/text.png"),
+
+	ICON_PROPERTY_LIST("icons/browser_list.png", "icons/browser_list.png"),
+
+	ICON_PROPERTY_STRING("icons/text.png", "icons/text.png"),
+
+	ICON_PROPERTY_NUMERIC("icons/calculator.png", "icons/calculator.png"),
+
+	ICON_PROPERTY_XML("icons/xml.png", "icons/xml.png"),
+	
+	ICON_PROPERTY_XPATH("icons/xpath.png", "icons/xpath.png"),
+	
+	ICON_PROPERTY_DATE("icons/calendar.png", "icons/calendar.png"),
+
+	ICON_PROPERTY_FILE("icons/file.png", "icons/file.png"),
+	
+	ICON_PROPERTY_BOOLEAN("icons/boolean.png", "icons/boolean.png"),
+	
+	ICON_PROPERTY_SQL("icons/sql.png", "icons/sql.png");
+	
 	/**
 	 * The unique symbolic name of the image used to identify the image in the
 	 * <code>ImageProvider</code>.

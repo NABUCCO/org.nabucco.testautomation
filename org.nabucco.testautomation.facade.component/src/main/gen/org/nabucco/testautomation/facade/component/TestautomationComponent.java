@@ -6,6 +6,8 @@ package org.nabucco.testautomation.facade.component;
 import org.nabucco.framework.base.facade.component.Component;
 import org.nabucco.framework.base.facade.exception.service.ServiceException;
 import org.nabucco.framework.common.authorization.facade.component.AuthorizationComponent;
+import org.nabucco.testautomation.facade.service.export.ExportTestautomation;
+import org.nabucco.testautomation.facade.service.importing.ImportTestautomation;
 import org.nabucco.testautomation.facade.service.maintain.MaintainProperty;
 import org.nabucco.testautomation.facade.service.maintain.MaintainTestEngineConfiguration;
 import org.nabucco.testautomation.facade.service.produce.ProduceProperty;
@@ -78,4 +80,20 @@ public interface TestautomationComponent extends Component {
      * @throws ServiceException
      */
     SearchTestEngineConfiguration getSearchTestEngineConfiguration() throws ServiceException;
+
+    /**
+     * Getter for the ExportTestautomation.
+     *
+     * @return the ExportTestautomation.
+     * @throws ServiceException
+     */
+    ExportTestautomation getExportTestautomation() throws ServiceException;
+
+    /**
+     * Getter for the ImportTestautomation.
+     *
+     * @return the ImportTestautomation.
+     * @throws ServiceException
+     */
+    ImportTestautomation getImportTestautomation() throws ServiceException;
 }

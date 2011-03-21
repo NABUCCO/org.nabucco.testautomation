@@ -23,6 +23,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.nabucco.framework.base.facade.datatype.Datatype;
+import org.nabucco.framework.base.facade.datatype.property.NabuccoProperty;
 import org.nabucco.framework.base.facade.datatype.security.User;
 import org.nabucco.framework.plugin.base.Activator;
 import org.nabucco.framework.plugin.base.component.multipage.masterdetail.detail.widget.BaseTypeWidgetFactory;
@@ -65,28 +66,32 @@ public class TestEngineConfigurationDetailPageViewLayouter extends Testautomatio
 	}
 
 	@Override
-	protected Control layoutElement(Composite parent, BaseTypeWidgetFactory widgetFactory, Datatype datatype, String masterBlockId, Object property,
-			String propertyName, GridData data, boolean readOnly, ViewModel externalViewModel, NabuccoMessageManager messageManager) {
+	protected Control layoutElement(Composite parent, BaseTypeWidgetFactory widgetFactory, Datatype datatype, String masterBlockId, NabuccoProperty property,
+			GridData data, boolean readOnly, ViewModel externalViewModel, NabuccoMessageManager messageManager) {
 
+		Object instance = property.getInstance();
+		
 		// Validate property multiplicity
-		if ((property instanceof List<?>)) {
-			return super.layoutElement(parent, widgetFactory, datatype, masterBlockId, property, propertyName, data, readOnly, externalViewModel,
+		if ((instance instanceof List<?>)) {
+			return super.layoutElement(parent, widgetFactory, datatype, masterBlockId, property, data, readOnly, externalViewModel,
 					messageManager);
 		}
 
 		// Validate parent Type
 		if (!(datatype instanceof TestEngineConfiguration)) {
-			return super.layoutElement(parent, widgetFactory, datatype, masterBlockId, property, propertyName, data, readOnly, externalViewModel,
+			return super.layoutElement(parent, widgetFactory, datatype, masterBlockId, property, data, readOnly, externalViewModel,
 					messageManager);
 		}
 
 		// Validate property name
+		String propertyName = property.getName();
+		
 		if (propertyName.equalsIgnoreCase(PROPERTY_USER)) {
-			return this.layoutUserPicker(parent, widgetFactory, datatype, masterBlockId, property, propertyName, data, readOnly, externalViewModel,
+			return this.layoutUserPicker(parent, widgetFactory, datatype, masterBlockId, (User) instance, propertyName, data, readOnly, externalViewModel,
 					messageManager);
 		}
 
-		return super.layoutElement(parent, widgetFactory, datatype, masterBlockId, property, propertyName, data, readOnly, externalViewModel, messageManager);
+		return super.layoutElement(parent, widgetFactory, datatype, masterBlockId, property, data, readOnly, externalViewModel, messageManager);
 	}
 
 	/**
@@ -115,13 +120,13 @@ public class TestEngineConfigurationDetailPageViewLayouter extends Testautomatio
 	 * 
 	 * @return the layouted table
 	 */
-	private Control layoutUserPicker(Composite parent, BaseTypeWidgetFactory widgetFactory, Datatype datatype, String masterBlockId, Object property,
+	private Control layoutUserPicker(Composite parent, BaseTypeWidgetFactory widgetFactory, Datatype datatype, String masterBlockId, User user,
 			String propertyName, GridData data, boolean readOnly, ViewModel externalViewModel, NabuccoMessageManager messageManager) {
 
 		NabuccoFormToolkit nft = widgetFactory.getNabuccoFormToolKit();
 
 		UserPickerWidgetCreator widgetCreator = new UserPickerWidgetCreator(parent, widgetFactory, data, nft, externalViewModel,
-				masterBlockId, (User) property, (TestEngineConfiguration) datatype);
+				masterBlockId, user, (TestEngineConfiguration) datatype);
 		Control newWidget = widgetCreator.createWidgets();
 
 		if (newWidget == null) {

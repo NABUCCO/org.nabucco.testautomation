@@ -3,10 +3,15 @@
  */
 package org.nabucco.testautomation.facade.message;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.nabucco.framework.base.facade.datatype.Identifier;
-import org.nabucco.framework.base.facade.datatype.property.BasetypeProperty;
 import org.nabucco.framework.base.facade.datatype.property.NabuccoProperty;
+import org.nabucco.framework.base.facade.datatype.property.NabuccoPropertyContainer;
+import org.nabucco.framework.base.facade.datatype.property.NabuccoPropertyDescriptor;
+import org.nabucco.framework.base.facade.datatype.property.PropertyCache;
+import org.nabucco.framework.base.facade.datatype.property.PropertyDescriptorSupport;
 import org.nabucco.framework.base.facade.message.ServiceMessage;
 import org.nabucco.framework.base.facade.message.ServiceMessageSupport;
 
@@ -20,9 +25,9 @@ public class ProxyConfigurationSearchMsg extends ServiceMessageSupport implement
 
     private static final long serialVersionUID = 1L;
 
-    private static final String[] PROPERTY_NAMES = { "id" };
-
     private static final String[] PROPERTY_CONSTRAINTS = { "l0,n;m0,1;" };
+
+    public static final String ID = "id";
 
     private Identifier id;
 
@@ -31,12 +36,36 @@ public class ProxyConfigurationSearchMsg extends ServiceMessageSupport implement
         super();
     }
 
+    /**
+     * CreatePropertyContainer.
+     *
+     * @return the NabuccoPropertyContainer.
+     */
+    protected static NabuccoPropertyContainer createPropertyContainer() {
+        Map<String, NabuccoPropertyDescriptor> propertyMap = new HashMap<String, NabuccoPropertyDescriptor>();
+        propertyMap.put(ID, PropertyDescriptorSupport.createBasetype(ID, Identifier.class, 0,
+                PROPERTY_CONSTRAINTS[0], false));
+        return new NabuccoPropertyContainer(propertyMap);
+    }
+
     @Override
-    public List<NabuccoProperty<?>> getProperties() {
-        List<NabuccoProperty<?>> properties = super.getProperties();
-        properties.add(new BasetypeProperty<Identifier>(PROPERTY_NAMES[0], Identifier.class,
-                PROPERTY_CONSTRAINTS[0], this.id));
+    public List<NabuccoProperty> getProperties() {
+        List<NabuccoProperty> properties = super.getProperties();
+        properties.add(super.createProperty(ProxyConfigurationSearchMsg.getPropertyDescriptor(ID),
+                this.id));
         return properties;
+    }
+
+    @Override
+    public boolean setProperty(NabuccoProperty property) {
+        if (super.setProperty(property)) {
+            return true;
+        }
+        if ((property.getName().equals(ID) && (property.getType() == Identifier.class))) {
+            this.setId(((Identifier) property.getInstance()));
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -71,16 +100,6 @@ public class ProxyConfigurationSearchMsg extends ServiceMessageSupport implement
     }
 
     @Override
-    public String toString() {
-        StringBuilder appendable = new StringBuilder();
-        appendable.append("<ProxyConfigurationSearchMsg>\n");
-        appendable.append(super.toString());
-        appendable.append((("<id>" + this.id) + "</id>\n"));
-        appendable.append("</ProxyConfigurationSearchMsg>\n");
-        return appendable.toString();
-    }
-
-    @Override
     public ServiceMessage cloneObject() {
         return this;
     }
@@ -101,5 +120,26 @@ public class ProxyConfigurationSearchMsg extends ServiceMessageSupport implement
      */
     public void setId(Identifier id) {
         this.id = id;
+    }
+
+    /**
+     * Getter for the PropertyDescriptor.
+     *
+     * @param propertyName the String.
+     * @return the NabuccoPropertyDescriptor.
+     */
+    public static NabuccoPropertyDescriptor getPropertyDescriptor(String propertyName) {
+        return PropertyCache.getInstance().retrieve(ProxyConfigurationSearchMsg.class)
+                .getProperty(propertyName);
+    }
+
+    /**
+     * Getter for the PropertyDescriptorList.
+     *
+     * @return the List<NabuccoPropertyDescriptor>.
+     */
+    public static List<NabuccoPropertyDescriptor> getPropertyDescriptorList() {
+        return PropertyCache.getInstance().retrieve(ProxyConfigurationSearchMsg.class)
+                .getAllProperties();
     }
 }

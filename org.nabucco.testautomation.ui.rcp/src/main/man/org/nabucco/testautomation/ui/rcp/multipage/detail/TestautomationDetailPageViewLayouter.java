@@ -21,15 +21,25 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.nabucco.framework.base.facade.datatype.Datatype;
 import org.nabucco.framework.base.facade.datatype.documentation.Documentation;
+import org.nabucco.framework.base.facade.datatype.file.TextFileContent;
+import org.nabucco.framework.base.facade.datatype.log.LogTrace;
+import org.nabucco.framework.base.facade.datatype.property.NabuccoProperty;
 import org.nabucco.framework.common.dynamiccode.ui.rcp.component.multipage.masterdetail.detail.DynamicCodeEnabledGeneralDetailPageViewLayouter;
 import org.nabucco.framework.plugin.base.Activator;
 import org.nabucco.framework.plugin.base.component.multipage.masterdetail.detail.widget.BaseTypeWidgetFactory;
 import org.nabucco.framework.plugin.base.model.ViewModel;
 import org.nabucco.framework.plugin.base.view.NabuccoFormToolkit;
 import org.nabucco.framework.plugin.base.view.NabuccoMessageManager;
-import org.nabucco.testautomation.ui.rcp.multipage.detail.textarea.TextAreaCombinationWidgetCreator;
+import org.nabucco.testautomation.facade.datatype.base.ErrorMessage;
+import org.nabucco.testautomation.facade.datatype.base.SqlValue;
+import org.nabucco.testautomation.facade.datatype.base.XmlValue;
+import org.nabucco.testautomation.ui.rcp.base.text.TextAreaCombinationWidgetCreator;
 
-
+/**
+ * TestautomationDetailPageViewLayouter
+ * 
+ * @author Markus Jorroch, PRODYNA AG
+ */
 public class TestautomationDetailPageViewLayouter extends DynamicCodeEnabledGeneralDetailPageViewLayouter {
 
 	public TestautomationDetailPageViewLayouter(String detailTitle) {
@@ -39,48 +49,56 @@ public class TestautomationDetailPageViewLayouter extends DynamicCodeEnabledGene
 	@Override
 	protected Control layoutElement(Composite parent,
 			BaseTypeWidgetFactory widgetFactory, Datatype datatype,
-			String masterBlockId, Object property, String propertyName,
+			String masterBlockId, NabuccoProperty property, 
 			GridData data, boolean readOnly, ViewModel externalViewModel,
 			NabuccoMessageManager messageManager) {
 
-		 if (property == null) {
-		        String firstChar = propertyName.substring(0, 1).toUpperCase();
-		        String lastPart = propertyName.substring(1);
-	            property = this.initializeBasetype(datatype, firstChar, lastPart);
-	        }
+		String propertyName = property.getName();
+		String firstChar = propertyName.substring(0, 1).toUpperCase();
+		String lastPart = propertyName.substring(1);
+		Object instance = property.getInstance();
 		
-		if(property instanceof Documentation){
-			return this.layoutDocumentation(parent, widgetFactory, datatype,
-					masterBlockId, (Documentation) property, propertyName, data, readOnly,
+		if (instance == null) {
+			property = property.createProperty(this.initializeBasetype(datatype, firstChar, lastPart));
+		}
+		
+		instance = property.getInstance();
+		if (instance instanceof Documentation
+				|| instance instanceof XmlValue
+				|| instance instanceof SqlValue
+				|| instance instanceof ErrorMessage
+				|| instance instanceof LogTrace
+				|| instance instanceof TextFileContent) {
+			return this.layoutLongText(parent, widgetFactory, datatype,
+					masterBlockId, property, data, readOnly,
 					externalViewModel, messageManager);
 		}
 
 		return super.layoutElement(parent, widgetFactory, datatype,
-				masterBlockId, property, propertyName, data, readOnly,
+				masterBlockId, property, data, readOnly,
 				externalViewModel, messageManager);
 	}
 
-	
-	
-	private Control layoutDocumentation(Composite parent,
+	private Control layoutLongText(Composite parent,
 			BaseTypeWidgetFactory widgetFactory, Datatype datatype,
-			String masterBlockId, Documentation documentation, String propertyName,
+			String masterBlockId, NabuccoProperty property,
 			GridData data, boolean readOnly, ViewModel externalViewModel,
 			NabuccoMessageManager messageManager) {
 		
+		readOnly = !property.getConstraints().isEditable() || readOnly;
+		
 		NabuccoFormToolkit nft = widgetFactory.getNabuccoFormToolKit();
 		TextAreaCombinationWidgetCreator widgetCreator = new TextAreaCombinationWidgetCreator(nft);
-		Control newWidget = widgetCreator.createWidget(parent, data, datatype, documentation, externalViewModel, widgetFactory, masterBlockId, readOnly);
+		Control newWidget = widgetCreator.createWidget(parent, data, datatype, property, externalViewModel, widgetFactory, masterBlockId, readOnly);
 		
 		if (newWidget == null) {
 			Activator.getDefault().logError(
-					"Cannot create FileProperty Widget [null].");
+					"Cannot create Widget for " + property.getType().getSimpleName());
 			newWidget = nft.createRealLabel(parent, "INVALID");
 		} else {
-				super.setDataForWidget(data, newWidget);
+			super.setDataForWidget(data, newWidget);
 		}
 		return null;
 	}
-
 
 }

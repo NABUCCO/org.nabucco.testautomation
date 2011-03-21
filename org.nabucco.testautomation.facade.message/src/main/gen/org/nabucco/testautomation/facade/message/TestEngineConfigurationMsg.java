@@ -3,9 +3,15 @@
  */
 package org.nabucco.testautomation.facade.message;
 
+import java.util.HashMap;
 import java.util.List;
-import org.nabucco.framework.base.facade.datatype.property.DatatypeProperty;
+import java.util.Map;
 import org.nabucco.framework.base.facade.datatype.property.NabuccoProperty;
+import org.nabucco.framework.base.facade.datatype.property.NabuccoPropertyContainer;
+import org.nabucco.framework.base.facade.datatype.property.NabuccoPropertyDescriptor;
+import org.nabucco.framework.base.facade.datatype.property.PropertyAssociationType;
+import org.nabucco.framework.base.facade.datatype.property.PropertyCache;
+import org.nabucco.framework.base.facade.datatype.property.PropertyDescriptorSupport;
 import org.nabucco.framework.base.facade.message.ServiceMessage;
 import org.nabucco.framework.base.facade.message.ServiceMessageSupport;
 import org.nabucco.testautomation.facade.datatype.engine.TestEngineConfiguration;
@@ -22,10 +28,13 @@ public class TestEngineConfigurationMsg extends ServiceMessageSupport implements
 
     private static final long serialVersionUID = 1L;
 
-    private static final String[] PROPERTY_NAMES = { "testEngineConfiguration",
-            "proxyConfiguration", "configurationProperty" };
-
     private static final String[] PROPERTY_CONSTRAINTS = { "m1,1;", "m1,1;", "m1,1;" };
+
+    public static final String TESTENGINECONFIGURATION = "testEngineConfiguration";
+
+    public static final String PROXYCONFIGURATION = "proxyConfiguration";
+
+    public static final String CONFIGURATIONPROPERTY = "configurationProperty";
 
     private TestEngineConfiguration testEngineConfiguration;
 
@@ -38,17 +47,56 @@ public class TestEngineConfigurationMsg extends ServiceMessageSupport implements
         super();
     }
 
+    /**
+     * CreatePropertyContainer.
+     *
+     * @return the NabuccoPropertyContainer.
+     */
+    protected static NabuccoPropertyContainer createPropertyContainer() {
+        Map<String, NabuccoPropertyDescriptor> propertyMap = new HashMap<String, NabuccoPropertyDescriptor>();
+        propertyMap.put(TESTENGINECONFIGURATION, PropertyDescriptorSupport.createDatatype(
+                TESTENGINECONFIGURATION, TestEngineConfiguration.class, 0, PROPERTY_CONSTRAINTS[0],
+                false, PropertyAssociationType.COMPOSITION));
+        propertyMap.put(PROXYCONFIGURATION, PropertyDescriptorSupport.createDatatype(
+                PROXYCONFIGURATION, ProxyConfiguration.class, 1, PROPERTY_CONSTRAINTS[1], false,
+                PropertyAssociationType.COMPOSITION));
+        propertyMap.put(CONFIGURATIONPROPERTY, PropertyDescriptorSupport.createDatatype(
+                CONFIGURATIONPROPERTY, ConfigurationProperty.class, 2, PROPERTY_CONSTRAINTS[2],
+                false, PropertyAssociationType.COMPOSITION));
+        return new NabuccoPropertyContainer(propertyMap);
+    }
+
     @Override
-    public List<NabuccoProperty<?>> getProperties() {
-        List<NabuccoProperty<?>> properties = super.getProperties();
-        properties.add(new DatatypeProperty<TestEngineConfiguration>(PROPERTY_NAMES[0],
-                TestEngineConfiguration.class, PROPERTY_CONSTRAINTS[0],
+    public List<NabuccoProperty> getProperties() {
+        List<NabuccoProperty> properties = super.getProperties();
+        properties.add(super.createProperty(
+                TestEngineConfigurationMsg.getPropertyDescriptor(TESTENGINECONFIGURATION),
                 this.testEngineConfiguration));
-        properties.add(new DatatypeProperty<ProxyConfiguration>(PROPERTY_NAMES[1],
-                ProxyConfiguration.class, PROPERTY_CONSTRAINTS[1], this.proxyConfiguration));
-        properties.add(new DatatypeProperty<ConfigurationProperty>(PROPERTY_NAMES[2],
-                ConfigurationProperty.class, PROPERTY_CONSTRAINTS[2], this.configurationProperty));
+        properties.add(super.createProperty(
+                TestEngineConfigurationMsg.getPropertyDescriptor(PROXYCONFIGURATION),
+                this.proxyConfiguration));
+        properties.add(super.createProperty(
+                TestEngineConfigurationMsg.getPropertyDescriptor(CONFIGURATIONPROPERTY),
+                this.configurationProperty));
         return properties;
+    }
+
+    @Override
+    public boolean setProperty(NabuccoProperty property) {
+        if (super.setProperty(property)) {
+            return true;
+        }
+        if ((property.getName().equals(TESTENGINECONFIGURATION) && (property.getType() == TestEngineConfiguration.class))) {
+            this.setTestEngineConfiguration(((TestEngineConfiguration) property.getInstance()));
+            return true;
+        } else if ((property.getName().equals(PROXYCONFIGURATION) && (property.getType() == ProxyConfiguration.class))) {
+            this.setProxyConfiguration(((ProxyConfiguration) property.getInstance()));
+            return true;
+        } else if ((property.getName().equals(CONFIGURATIONPROPERTY) && (property.getType() == ConfigurationProperty.class))) {
+            this.setConfigurationProperty(((ConfigurationProperty) property.getInstance()));
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -95,21 +143,6 @@ public class TestEngineConfigurationMsg extends ServiceMessageSupport implements
         result = ((PRIME * result) + ((this.configurationProperty == null) ? 0
                 : this.configurationProperty.hashCode()));
         return result;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder appendable = new StringBuilder();
-        appendable.append("<TestEngineConfigurationMsg>\n");
-        appendable.append(super.toString());
-        appendable
-                .append((("<testEngineConfiguration>" + this.testEngineConfiguration) + "</testEngineConfiguration>\n"));
-        appendable
-                .append((("<proxyConfiguration>" + this.proxyConfiguration) + "</proxyConfiguration>\n"));
-        appendable
-                .append((("<configurationProperty>" + this.configurationProperty) + "</configurationProperty>\n"));
-        appendable.append("</TestEngineConfigurationMsg>\n");
-        return appendable.toString();
     }
 
     @Override
@@ -169,5 +202,26 @@ public class TestEngineConfigurationMsg extends ServiceMessageSupport implements
      */
     public void setConfigurationProperty(ConfigurationProperty configurationProperty) {
         this.configurationProperty = configurationProperty;
+    }
+
+    /**
+     * Getter for the PropertyDescriptor.
+     *
+     * @param propertyName the String.
+     * @return the NabuccoPropertyDescriptor.
+     */
+    public static NabuccoPropertyDescriptor getPropertyDescriptor(String propertyName) {
+        return PropertyCache.getInstance().retrieve(TestEngineConfigurationMsg.class)
+                .getProperty(propertyName);
+    }
+
+    /**
+     * Getter for the PropertyDescriptorList.
+     *
+     * @return the List<NabuccoPropertyDescriptor>.
+     */
+    public static List<NabuccoPropertyDescriptor> getPropertyDescriptorList() {
+        return PropertyCache.getInstance().retrieve(TestEngineConfigurationMsg.class)
+                .getAllProperties();
     }
 }

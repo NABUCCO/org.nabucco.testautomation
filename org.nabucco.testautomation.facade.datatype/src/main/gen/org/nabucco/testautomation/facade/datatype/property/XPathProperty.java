@@ -3,10 +3,15 @@
  */
 package org.nabucco.testautomation.facade.datatype.property;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.nabucco.framework.base.facade.datatype.Datatype;
-import org.nabucco.framework.base.facade.datatype.property.BasetypeProperty;
 import org.nabucco.framework.base.facade.datatype.property.NabuccoProperty;
+import org.nabucco.framework.base.facade.datatype.property.NabuccoPropertyContainer;
+import org.nabucco.framework.base.facade.datatype.property.NabuccoPropertyDescriptor;
+import org.nabucco.framework.base.facade.datatype.property.PropertyCache;
+import org.nabucco.framework.base.facade.datatype.property.PropertyDescriptorSupport;
 import org.nabucco.testautomation.facade.datatype.base.XPathValue;
 import org.nabucco.testautomation.facade.datatype.property.base.PropertyComposite;
 import org.nabucco.testautomation.facade.datatype.property.base.PropertyType;
@@ -21,9 +26,9 @@ public class XPathProperty extends PropertyComposite implements Datatype {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String[] PROPERTY_NAMES = { "value" };
+    private static final String[] PROPERTY_CONSTRAINTS = { "l0,n;m0,1;" };
 
-    private static final String[] PROPERTY_CONSTRAINTS = { "l0,n;m1,1;" };
+    public static final String VALUE = "value";
 
     private XPathValue value;
 
@@ -51,17 +56,43 @@ public class XPathProperty extends PropertyComposite implements Datatype {
         clone.setType(this.getType());
     }
 
+    /**
+     * CreatePropertyContainer.
+     *
+     * @return the NabuccoPropertyContainer.
+     */
+    protected static NabuccoPropertyContainer createPropertyContainer() {
+        Map<String, NabuccoPropertyDescriptor> propertyMap = new HashMap<String, NabuccoPropertyDescriptor>();
+        propertyMap.putAll(PropertyCache.getInstance().retrieve(PropertyComposite.class)
+                .getPropertyMap());
+        propertyMap.put(VALUE, PropertyDescriptorSupport.createBasetype(VALUE, XPathValue.class, 9,
+                PROPERTY_CONSTRAINTS[0], false));
+        return new NabuccoPropertyContainer(propertyMap);
+    }
+
     @Override
     public void init() {
         this.initDefaults();
     }
 
     @Override
-    public List<NabuccoProperty<?>> getProperties() {
-        List<NabuccoProperty<?>> properties = super.getProperties();
-        properties.add(new BasetypeProperty<XPathValue>(PROPERTY_NAMES[0], XPathValue.class,
-                PROPERTY_CONSTRAINTS[0], this.value));
+    public List<NabuccoProperty> getProperties() {
+        List<NabuccoProperty> properties = super.getProperties();
+        properties.add(super.createProperty(XPathProperty.getPropertyDescriptor(VALUE), this.value,
+                null));
         return properties;
+    }
+
+    @Override
+    public boolean setProperty(NabuccoProperty property) {
+        if (super.setProperty(property)) {
+            return true;
+        }
+        if ((property.getName().equals(VALUE) && (property.getType() == XPathValue.class))) {
+            this.setValue(((XPathValue) property.getInstance()));
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -96,16 +127,6 @@ public class XPathProperty extends PropertyComposite implements Datatype {
     }
 
     @Override
-    public String toString() {
-        StringBuilder appendable = new StringBuilder();
-        appendable.append("<XPathProperty>\n");
-        appendable.append(super.toString());
-        appendable.append((("<value>" + this.value) + "</value>\n"));
-        appendable.append("</XPathProperty>\n");
-        return appendable.toString();
-    }
-
-    @Override
     public XPathProperty cloneObject() {
         XPathProperty clone = new XPathProperty();
         this.cloneObject(clone);
@@ -137,8 +158,30 @@ public class XPathProperty extends PropertyComposite implements Datatype {
      */
     public void setValue(String value) {
         if ((this.value == null)) {
+            if ((value == null)) {
+                return;
+            }
             this.value = new XPathValue();
         }
         this.value.setValue(value);
+    }
+
+    /**
+     * Getter for the PropertyDescriptor.
+     *
+     * @param propertyName the String.
+     * @return the NabuccoPropertyDescriptor.
+     */
+    public static NabuccoPropertyDescriptor getPropertyDescriptor(String propertyName) {
+        return PropertyCache.getInstance().retrieve(XPathProperty.class).getProperty(propertyName);
+    }
+
+    /**
+     * Getter for the PropertyDescriptorList.
+     *
+     * @return the List<NabuccoPropertyDescriptor>.
+     */
+    public static List<NabuccoPropertyDescriptor> getPropertyDescriptorList() {
+        return PropertyCache.getInstance().retrieve(XPathProperty.class).getAllProperties();
     }
 }

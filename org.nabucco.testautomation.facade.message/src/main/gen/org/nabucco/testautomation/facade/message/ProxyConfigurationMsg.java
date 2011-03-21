@@ -3,9 +3,15 @@
  */
 package org.nabucco.testautomation.facade.message;
 
+import java.util.HashMap;
 import java.util.List;
-import org.nabucco.framework.base.facade.datatype.property.DatatypeProperty;
+import java.util.Map;
 import org.nabucco.framework.base.facade.datatype.property.NabuccoProperty;
+import org.nabucco.framework.base.facade.datatype.property.NabuccoPropertyContainer;
+import org.nabucco.framework.base.facade.datatype.property.NabuccoPropertyDescriptor;
+import org.nabucco.framework.base.facade.datatype.property.PropertyAssociationType;
+import org.nabucco.framework.base.facade.datatype.property.PropertyCache;
+import org.nabucco.framework.base.facade.datatype.property.PropertyDescriptorSupport;
 import org.nabucco.framework.base.facade.message.ServiceMessage;
 import org.nabucco.framework.base.facade.message.ServiceMessageSupport;
 import org.nabucco.testautomation.facade.datatype.engine.proxy.ProxyConfiguration;
@@ -20,9 +26,9 @@ public class ProxyConfigurationMsg extends ServiceMessageSupport implements Serv
 
     private static final long serialVersionUID = 1L;
 
-    private static final String[] PROPERTY_NAMES = { "proxyConfiguration" };
-
     private static final String[] PROPERTY_CONSTRAINTS = { "m1,1;" };
+
+    public static final String PROXYCONFIGURATION = "proxyConfiguration";
 
     private ProxyConfiguration proxyConfiguration;
 
@@ -31,12 +37,38 @@ public class ProxyConfigurationMsg extends ServiceMessageSupport implements Serv
         super();
     }
 
+    /**
+     * CreatePropertyContainer.
+     *
+     * @return the NabuccoPropertyContainer.
+     */
+    protected static NabuccoPropertyContainer createPropertyContainer() {
+        Map<String, NabuccoPropertyDescriptor> propertyMap = new HashMap<String, NabuccoPropertyDescriptor>();
+        propertyMap.put(PROXYCONFIGURATION, PropertyDescriptorSupport.createDatatype(
+                PROXYCONFIGURATION, ProxyConfiguration.class, 0, PROPERTY_CONSTRAINTS[0], false,
+                PropertyAssociationType.COMPOSITION));
+        return new NabuccoPropertyContainer(propertyMap);
+    }
+
     @Override
-    public List<NabuccoProperty<?>> getProperties() {
-        List<NabuccoProperty<?>> properties = super.getProperties();
-        properties.add(new DatatypeProperty<ProxyConfiguration>(PROPERTY_NAMES[0],
-                ProxyConfiguration.class, PROPERTY_CONSTRAINTS[0], this.proxyConfiguration));
+    public List<NabuccoProperty> getProperties() {
+        List<NabuccoProperty> properties = super.getProperties();
+        properties.add(super.createProperty(
+                ProxyConfigurationMsg.getPropertyDescriptor(PROXYCONFIGURATION),
+                this.proxyConfiguration));
         return properties;
+    }
+
+    @Override
+    public boolean setProperty(NabuccoProperty property) {
+        if (super.setProperty(property)) {
+            return true;
+        }
+        if ((property.getName().equals(PROXYCONFIGURATION) && (property.getType() == ProxyConfiguration.class))) {
+            this.setProxyConfiguration(((ProxyConfiguration) property.getInstance()));
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -72,17 +104,6 @@ public class ProxyConfigurationMsg extends ServiceMessageSupport implements Serv
     }
 
     @Override
-    public String toString() {
-        StringBuilder appendable = new StringBuilder();
-        appendable.append("<ProxyConfigurationMsg>\n");
-        appendable.append(super.toString());
-        appendable
-                .append((("<proxyConfiguration>" + this.proxyConfiguration) + "</proxyConfiguration>\n"));
-        appendable.append("</ProxyConfigurationMsg>\n");
-        return appendable.toString();
-    }
-
-    @Override
     public ServiceMessage cloneObject() {
         return this;
     }
@@ -103,5 +124,25 @@ public class ProxyConfigurationMsg extends ServiceMessageSupport implements Serv
      */
     public void setProxyConfiguration(ProxyConfiguration proxyConfiguration) {
         this.proxyConfiguration = proxyConfiguration;
+    }
+
+    /**
+     * Getter for the PropertyDescriptor.
+     *
+     * @param propertyName the String.
+     * @return the NabuccoPropertyDescriptor.
+     */
+    public static NabuccoPropertyDescriptor getPropertyDescriptor(String propertyName) {
+        return PropertyCache.getInstance().retrieve(ProxyConfigurationMsg.class)
+                .getProperty(propertyName);
+    }
+
+    /**
+     * Getter for the PropertyDescriptorList.
+     *
+     * @return the List<NabuccoPropertyDescriptor>.
+     */
+    public static List<NabuccoPropertyDescriptor> getPropertyDescriptorList() {
+        return PropertyCache.getInstance().retrieve(ProxyConfigurationMsg.class).getAllProperties();
     }
 }

@@ -8,6 +8,8 @@ import org.nabucco.framework.base.facade.service.componentrelation.ComponentRela
 import org.nabucco.framework.base.impl.component.ComponentSupport;
 import org.nabucco.framework.common.authorization.facade.component.AuthorizationComponent;
 import org.nabucco.testautomation.facade.component.TestautomationComponent;
+import org.nabucco.testautomation.facade.service.export.ExportTestautomation;
+import org.nabucco.testautomation.facade.service.importing.ImportTestautomation;
 import org.nabucco.testautomation.facade.service.maintain.MaintainProperty;
 import org.nabucco.testautomation.facade.service.maintain.MaintainTestEngineConfiguration;
 import org.nabucco.testautomation.facade.service.produce.ProduceProperty;
@@ -41,6 +43,10 @@ public class TestautomationComponentImpl extends ComponentSupport implements
     private ProduceTestEngineConfiguration produceTestEngineConfiguration;
 
     private SearchTestEngineConfiguration searchTestEngineConfiguration;
+
+    private ExportTestautomation exportTestautomation;
+
+    private ImportTestautomation importTestautomation;
 
     /** Constructs a new TestautomationComponentImpl instance. */
     public TestautomationComponentImpl() {
@@ -113,5 +119,23 @@ public class TestautomationComponentImpl extends ComponentSupport implements
      */
     public SearchTestEngineConfiguration getSearchTestEngineConfiguration() {
         return this.searchTestEngineConfiguration;
+    }
+
+    /**
+     * Getter for the ExportTestautomation.
+     *
+     * @return the ExportTestautomation.
+     */
+    public ExportTestautomation getExportTestautomation() {
+        return this.exportTestautomation;
+    }
+
+    /**
+     * Getter for the ImportTestautomation.
+     *
+     * @return the ImportTestautomation.
+     */
+    public ImportTestautomation getImportTestautomation() {
+        return this.importTestautomation;
     }
 }

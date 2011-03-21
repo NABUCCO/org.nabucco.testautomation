@@ -37,26 +37,33 @@ public class EngineMaintenanceMasterDetailTreeNodeCreator extends
      * {@inheritDoc}
      */
     @Override
-    public MasterDetailTreeNode createNodeTyped(final Datatype dataType,
+    public MasterDetailTreeNode createNodeTyped(final Datatype datatype,
             final MasterDetailTreeNode parent,
             final MasterDetailTreeNodeCreatorForAllDatatypes builder) {
-        MasterDetailTreeNode result = new MasterDetailTreeNode(dataType, parent);
+        
+    	MasterDetailTreeNode result = new MasterDetailTreeNode(datatype, parent);
 
-        if (dataType instanceof TestEngineConfiguration) {
-        	TestEngineConfiguration testEngineConfiguration = (TestEngineConfiguration) dataType;
-            for (ProxyConfiguration proxyConfiguration : testEngineConfiguration.getProxyConfigurations()) {
+        if (datatype instanceof TestEngineConfiguration) {
+        	TestEngineConfiguration testEngineConfiguration = (TestEngineConfiguration) datatype;
+            
+        	for (ProxyConfiguration proxyConfiguration : testEngineConfiguration.getProxyConfigurations()) {
                 MasterDetailTreeNode child = MasterDetailTreeNodeCreatorForAllDatatypes
                         .getInstance().create(proxyConfiguration, result);
                 result.getChildren().add(child);
             }
-        } else if(dataType instanceof ProxyConfiguration) {
-        	ProxyConfiguration proxyConfiguration = (ProxyConfiguration) dataType;
-            for (ConfigurationProperty configurationProperty : proxyConfiguration.getConfigurationProperties()) {
+        } else if(datatype instanceof ProxyConfiguration) {
+        	ProxyConfiguration proxyConfiguration = (ProxyConfiguration) datatype;
+            
+        	for (ConfigurationProperty configurationProperty : proxyConfiguration.getConfigurationProperties()) {
                 MasterDetailTreeNode child = MasterDetailTreeNodeCreatorForAllDatatypes
                         .getInstance().create(configurationProperty, result);
                 result.getChildren().add(child);
             }
-        } 
+            
+            // Add Decorator
+            TreeNodeDecorator.decorateNode(result, proxyConfiguration);
+        }
+        
         return result;
     }
 

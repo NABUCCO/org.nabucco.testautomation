@@ -3,7 +3,7 @@
  */
 package org.nabucco.testautomation.ui.web.communication.maintain;
 
-import org.nabucco.framework.base.facade.datatype.security.Subject;
+import org.nabucco.framework.base.facade.datatype.session.NabuccoSession;
 import org.nabucco.framework.base.facade.exception.service.MaintainException;
 import org.nabucco.framework.base.facade.message.ServiceRequest;
 import org.nabucco.framework.base.facade.message.ServiceResponse;
@@ -34,35 +34,15 @@ public class MaintainPropertyDelegate extends ServiceDelegateSupport {
     /**
      * MaintainProperty.
      *
+     * @param session the NabuccoSession.
      * @param rq the PropertyMsg.
      * @return the PropertyMsg.
      * @throws MaintainException
      */
-    public PropertyMsg maintainProperty(PropertyMsg rq) throws MaintainException {
+    public PropertyMsg maintainProperty(PropertyMsg rq, NabuccoSession session)
+            throws MaintainException {
         ServiceRequest<PropertyMsg> request = new ServiceRequest<PropertyMsg>(
-                super.createServiceContext());
-        request.setRequestMessage(rq);
-        ServiceResponse<PropertyMsg> rs;
-        if ((service != null)) {
-            rs = service.maintainProperty(request);
-        } else {
-            throw new MaintainException(
-                    "Cannot execute service operation: MaintainProperty.maintainProperty");
-        }
-        return rs.getResponseMessage();
-    }
-
-    /**
-     * MaintainProperty.
-     *
-     * @param subject the Subject.
-     * @param rq the PropertyMsg.
-     * @return the PropertyMsg.
-     * @throws MaintainException
-     */
-    public PropertyMsg maintainProperty(PropertyMsg rq, Subject subject) throws MaintainException {
-        ServiceRequest<PropertyMsg> request = new ServiceRequest<PropertyMsg>(
-                super.createServiceContext(subject));
+                super.createServiceContext(session));
         request.setRequestMessage(rq);
         ServiceResponse<PropertyMsg> rs;
         if ((service != null)) {

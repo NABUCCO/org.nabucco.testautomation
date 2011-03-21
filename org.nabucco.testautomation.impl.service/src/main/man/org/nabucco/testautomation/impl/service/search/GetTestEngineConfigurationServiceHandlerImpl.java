@@ -16,12 +16,14 @@
 */
 package org.nabucco.testautomation.impl.service.search;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Query;
 
 import org.nabucco.framework.base.facade.datatype.DatatypeState;
 import org.nabucco.framework.base.facade.datatype.code.Code;
+import org.nabucco.framework.base.facade.datatype.collection.NabuccoCollectionAccessor;
 import org.nabucco.framework.base.facade.exception.service.SearchException;
 import org.nabucco.testautomation.facade.datatype.engine.TestEngineConfiguration;
 import org.nabucco.testautomation.facade.datatype.engine.proxy.ConfigurationProperty;
@@ -51,10 +53,10 @@ public class GetTestEngineConfigurationServiceHandlerImpl extends
 		}
 		
 		StringBuilder queryString = new StringBuilder();
-		queryString.append("SELECT c FROM TestEngineConfiguration c ");
+		queryString.append("FROM TestEngineConfiguration c ");
 
 		if (msg.getUser() != null && msg.getUser().getId() != null) {
-			queryString.append("WHERE userRefId = :refId");
+			queryString.append("WHERE c.userRefId = :refId");
 		} else {
 			queryString.append("WHERE c.id = :id");
 		}
@@ -111,9 +113,18 @@ public class GetTestEngineConfigurationServiceHandlerImpl extends
 //			}
 //		}
 		
+		List<ProxyConfiguration> disabledProxyConfigurations = new ArrayList<ProxyConfiguration>();
+		
 		// Resolve ProxyConfigurations
 		for (ProxyConfiguration config : proxyConfigurations) {
 			
+			// Do not load disabled ProxyConfigurations
+			if (config.getEnabled() == null || config.getEnabled().getValue() == null || !config.getEnabled().getValue().booleanValue()) {
+				disabledProxyConfigurations.add(config);
+				continue;
+			}
+			
+			// Load ProxyConfiguration deep
 			for (ConfigurationProperty configProp : config.getConfigurationProperties()) {
 				configProp.setDatatypeState(DatatypeState.PERSISTENT);
 			}
@@ -131,6 +142,15 @@ public class GetTestEngineConfigurationServiceHandlerImpl extends
 				super.getLogger().error("Could not resolve DynamicCodes for ProxyConfiguration [" + config.getId() + "]");
 			}
 		}
+		
+		// Detach Entities
+		this.getEntityManager().clear();
+
+		// Remove disabled ProxyConfigurations
+		for (ProxyConfiguration disabledProxy : disabledProxyConfigurations) {
+			proxyConfigurations.remove(disabledProxy);
+		}
+		NabuccoCollectionAccessor.getInstance().clearAssignments(proxyConfigurations);
 
 		TestEngineConfigurationMsg rs = new TestEngineConfigurationMsg();
 		rs.setTestEngineConfiguration(result);

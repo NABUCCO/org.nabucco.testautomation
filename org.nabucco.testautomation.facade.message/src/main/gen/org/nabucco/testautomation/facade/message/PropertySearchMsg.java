@@ -3,13 +3,18 @@
  */
 package org.nabucco.testautomation.facade.message;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.nabucco.framework.base.facade.datatype.Description;
 import org.nabucco.framework.base.facade.datatype.Identifier;
 import org.nabucco.framework.base.facade.datatype.Name;
-import org.nabucco.framework.base.facade.datatype.property.BasetypeProperty;
-import org.nabucco.framework.base.facade.datatype.property.EnumProperty;
+import org.nabucco.framework.base.facade.datatype.Owner;
 import org.nabucco.framework.base.facade.datatype.property.NabuccoProperty;
+import org.nabucco.framework.base.facade.datatype.property.NabuccoPropertyContainer;
+import org.nabucco.framework.base.facade.datatype.property.NabuccoPropertyDescriptor;
+import org.nabucco.framework.base.facade.datatype.property.PropertyCache;
+import org.nabucco.framework.base.facade.datatype.property.PropertyDescriptorSupport;
 import org.nabucco.framework.base.facade.message.ServiceMessage;
 import org.nabucco.framework.base.facade.message.ServiceMessageSupport;
 import org.nabucco.testautomation.facade.datatype.property.base.PropertyType;
@@ -25,11 +30,22 @@ public class PropertySearchMsg extends ServiceMessageSupport implements ServiceM
 
     private static final long serialVersionUID = 1L;
 
-    private static final String[] PROPERTY_NAMES = { "propertyName", "propertyId",
-            "propertyDescription", "propertyType", "usageType" };
+    private static final String[] PROPERTY_CONSTRAINTS = { "l3,12;m0,1;", "l0,255;m0,1;",
+            "l0,n;m0,1;", "l0,255;m0,1;", "m0,1;", "m0,1;" };
 
-    private static final String[] PROPERTY_CONSTRAINTS = { "l0,n;m1,1;", "l0,n;m1,1;",
-            "l0,n;m1,1;", "m1,1;", "m1,1;" };
+    public static final String OWNER = "owner";
+
+    public static final String PROPERTYNAME = "propertyName";
+
+    public static final String PROPERTYID = "propertyId";
+
+    public static final String PROPERTYDESCRIPTION = "propertyDescription";
+
+    public static final String PROPERTYTYPE = "propertyType";
+
+    public static final String USAGETYPE = "usageType";
+
+    private Owner owner;
 
     private Name propertyName;
 
@@ -46,20 +62,72 @@ public class PropertySearchMsg extends ServiceMessageSupport implements ServiceM
         super();
     }
 
+    /**
+     * CreatePropertyContainer.
+     *
+     * @return the NabuccoPropertyContainer.
+     */
+    protected static NabuccoPropertyContainer createPropertyContainer() {
+        Map<String, NabuccoPropertyDescriptor> propertyMap = new HashMap<String, NabuccoPropertyDescriptor>();
+        propertyMap.put(OWNER, PropertyDescriptorSupport.createBasetype(OWNER, Owner.class, 0,
+                PROPERTY_CONSTRAINTS[0], false));
+        propertyMap.put(PROPERTYNAME, PropertyDescriptorSupport.createBasetype(PROPERTYNAME,
+                Name.class, 1, PROPERTY_CONSTRAINTS[1], false));
+        propertyMap.put(PROPERTYID, PropertyDescriptorSupport.createBasetype(PROPERTYID,
+                Identifier.class, 2, PROPERTY_CONSTRAINTS[2], false));
+        propertyMap.put(PROPERTYDESCRIPTION, PropertyDescriptorSupport.createBasetype(
+                PROPERTYDESCRIPTION, Description.class, 3, PROPERTY_CONSTRAINTS[3], false));
+        propertyMap.put(PROPERTYTYPE, PropertyDescriptorSupport.createEnumeration(PROPERTYTYPE,
+                PropertyType.class, 4, PROPERTY_CONSTRAINTS[4], false));
+        propertyMap.put(USAGETYPE, PropertyDescriptorSupport.createEnumeration(USAGETYPE,
+                PropertyUsageType.class, 5, PROPERTY_CONSTRAINTS[5], false));
+        return new NabuccoPropertyContainer(propertyMap);
+    }
+
     @Override
-    public List<NabuccoProperty<?>> getProperties() {
-        List<NabuccoProperty<?>> properties = super.getProperties();
-        properties.add(new BasetypeProperty<Name>(PROPERTY_NAMES[0], Name.class,
-                PROPERTY_CONSTRAINTS[0], this.propertyName));
-        properties.add(new BasetypeProperty<Identifier>(PROPERTY_NAMES[1], Identifier.class,
-                PROPERTY_CONSTRAINTS[1], this.propertyId));
-        properties.add(new BasetypeProperty<Description>(PROPERTY_NAMES[2], Description.class,
-                PROPERTY_CONSTRAINTS[2], this.propertyDescription));
-        properties.add(new EnumProperty<PropertyType>(PROPERTY_NAMES[3], PropertyType.class,
-                PROPERTY_CONSTRAINTS[3], this.propertyType));
-        properties.add(new EnumProperty<PropertyUsageType>(PROPERTY_NAMES[4],
-                PropertyUsageType.class, PROPERTY_CONSTRAINTS[4], this.usageType));
+    public List<NabuccoProperty> getProperties() {
+        List<NabuccoProperty> properties = super.getProperties();
+        properties.add(super.createProperty(PropertySearchMsg.getPropertyDescriptor(OWNER),
+                this.owner));
+        properties.add(super.createProperty(PropertySearchMsg.getPropertyDescriptor(PROPERTYNAME),
+                this.propertyName));
+        properties.add(super.createProperty(PropertySearchMsg.getPropertyDescriptor(PROPERTYID),
+                this.propertyId));
+        properties.add(super.createProperty(
+                PropertySearchMsg.getPropertyDescriptor(PROPERTYDESCRIPTION),
+                this.propertyDescription));
+        properties.add(super.createProperty(PropertySearchMsg.getPropertyDescriptor(PROPERTYTYPE),
+                this.propertyType));
+        properties.add(super.createProperty(PropertySearchMsg.getPropertyDescriptor(USAGETYPE),
+                this.usageType));
         return properties;
+    }
+
+    @Override
+    public boolean setProperty(NabuccoProperty property) {
+        if (super.setProperty(property)) {
+            return true;
+        }
+        if ((property.getName().equals(OWNER) && (property.getType() == Owner.class))) {
+            this.setOwner(((Owner) property.getInstance()));
+            return true;
+        } else if ((property.getName().equals(PROPERTYNAME) && (property.getType() == Name.class))) {
+            this.setPropertyName(((Name) property.getInstance()));
+            return true;
+        } else if ((property.getName().equals(PROPERTYID) && (property.getType() == Identifier.class))) {
+            this.setPropertyId(((Identifier) property.getInstance()));
+            return true;
+        } else if ((property.getName().equals(PROPERTYDESCRIPTION) && (property.getType() == Description.class))) {
+            this.setPropertyDescription(((Description) property.getInstance()));
+            return true;
+        } else if ((property.getName().equals(PROPERTYTYPE) && (property.getType() == PropertyType.class))) {
+            this.setPropertyType(((PropertyType) property.getInstance()));
+            return true;
+        } else if ((property.getName().equals(USAGETYPE) && (property.getType() == PropertyUsageType.class))) {
+            this.setUsageType(((PropertyUsageType) property.getInstance()));
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -77,6 +145,11 @@ public class PropertySearchMsg extends ServiceMessageSupport implements ServiceM
             return false;
         }
         final PropertySearchMsg other = ((PropertySearchMsg) obj);
+        if ((this.owner == null)) {
+            if ((other.owner != null))
+                return false;
+        } else if ((!this.owner.equals(other.owner)))
+            return false;
         if ((this.propertyName == null)) {
             if ((other.propertyName != null))
                 return false;
@@ -109,6 +182,7 @@ public class PropertySearchMsg extends ServiceMessageSupport implements ServiceM
     public int hashCode() {
         final int PRIME = 31;
         int result = super.hashCode();
+        result = ((PRIME * result) + ((this.owner == null) ? 0 : this.owner.hashCode()));
         result = ((PRIME * result) + ((this.propertyName == null) ? 0 : this.propertyName
                 .hashCode()));
         result = ((PRIME * result) + ((this.propertyId == null) ? 0 : this.propertyId.hashCode()));
@@ -121,23 +195,26 @@ public class PropertySearchMsg extends ServiceMessageSupport implements ServiceM
     }
 
     @Override
-    public String toString() {
-        StringBuilder appendable = new StringBuilder();
-        appendable.append("<PropertySearchMsg>\n");
-        appendable.append(super.toString());
-        appendable.append((("<propertyName>" + this.propertyName) + "</propertyName>\n"));
-        appendable.append((("<propertyId>" + this.propertyId) + "</propertyId>\n"));
-        appendable
-                .append((("<propertyDescription>" + this.propertyDescription) + "</propertyDescription>\n"));
-        appendable.append((("<propertyType>" + this.propertyType) + "</propertyType>\n"));
-        appendable.append((("<usageType>" + this.usageType) + "</usageType>\n"));
-        appendable.append("</PropertySearchMsg>\n");
-        return appendable.toString();
-    }
-
-    @Override
     public ServiceMessage cloneObject() {
         return this;
+    }
+
+    /**
+     * Missing description at method getOwner.
+     *
+     * @return the Owner.
+     */
+    public Owner getOwner() {
+        return this.owner;
+    }
+
+    /**
+     * Missing description at method setOwner.
+     *
+     * @param owner the Owner.
+     */
+    public void setOwner(Owner owner) {
+        this.owner = owner;
     }
 
     /**
@@ -228,5 +305,25 @@ public class PropertySearchMsg extends ServiceMessageSupport implements ServiceM
      */
     public void setUsageType(PropertyUsageType usageType) {
         this.usageType = usageType;
+    }
+
+    /**
+     * Getter for the PropertyDescriptor.
+     *
+     * @param propertyName the String.
+     * @return the NabuccoPropertyDescriptor.
+     */
+    public static NabuccoPropertyDescriptor getPropertyDescriptor(String propertyName) {
+        return PropertyCache.getInstance().retrieve(PropertySearchMsg.class)
+                .getProperty(propertyName);
+    }
+
+    /**
+     * Getter for the PropertyDescriptorList.
+     *
+     * @return the List<NabuccoPropertyDescriptor>.
+     */
+    public static List<NabuccoPropertyDescriptor> getPropertyDescriptorList() {
+        return PropertyCache.getInstance().retrieve(PropertySearchMsg.class).getAllProperties();
     }
 }

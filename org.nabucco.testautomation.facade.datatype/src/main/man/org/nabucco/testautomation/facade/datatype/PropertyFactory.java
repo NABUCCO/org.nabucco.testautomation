@@ -16,7 +16,9 @@
 */
 package org.nabucco.testautomation.facade.datatype;
 
+import org.nabucco.framework.base.facade.component.NabuccoInstance;
 import org.nabucco.framework.base.facade.datatype.DatatypeState;
+import org.nabucco.framework.base.facade.datatype.Key;
 import org.nabucco.testautomation.facade.datatype.property.BooleanProperty;
 import org.nabucco.testautomation.facade.datatype.property.DateProperty;
 import org.nabucco.testautomation.facade.datatype.property.DoubleProperty;
@@ -103,6 +105,8 @@ public class PropertyFactory {
 		
 		property.setDatatypeState(DatatypeState.INITIALIZED);
 		property.setName(DEFAULT_NAME);
+		property.setOwner(NabuccoInstance.getInstance().getOwner());
+		property.setIdentificationKey(new Key());
 		return property;
 	}
 	

@@ -43,6 +43,7 @@ public class ProduceProxyConfigurationServiceHandlerImpl extends
 		config.setDatatypeState(DatatypeState.INITIALIZED);
 		config.setSubEngineType(SubEngineType.DB);
 		config.setName("Enter name ...");
+		config.setEnabled(Boolean.FALSE);
 		rs.setProxyConfiguration(config);
 		return rs;
 	}
