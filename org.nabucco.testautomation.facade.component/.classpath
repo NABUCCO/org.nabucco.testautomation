@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/main/gen"/>
+	<classpathentry kind="src" path="src/main/man"/>
+	<classpathentry kind="src" path="src/test/gen"/>
+	<classpathentry kind="src" path="src/test/man"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.nabucco.testautomation.facade.service"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.nabucco.testautomation.facade.exception"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.nabucco.testautomation.facade.message"/>
+	<classpathentry kind="lib" path="/org.nabucco.testautomation/lib/org.nabucco.framework.base.facade.jar"/>
+	<classpathentry kind="lib" path="/org.nabucco.testautomation/lib/org.nabucco.framework.common.authorization.facade.jar"/>
+	<classpathentry kind="output" path="out/ide"/>
+</classpath>

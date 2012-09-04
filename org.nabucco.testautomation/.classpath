@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/nbc"/>
+	<classpathentry kind="src" path="src/test"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.nabucco.testautomation.facade.component"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.nabucco.testautomation.facade.datatype"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.nabucco.testautomation.facade.exception"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.nabucco.testautomation.facade.message"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.nabucco.testautomation.facade.service"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.nabucco.testautomation.impl.component"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.nabucco.testautomation.impl.service"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="lib/org.nabucco.framework.base.facade.jar"/>
+	<classpathentry kind="lib" path="lib/org.nabucco.framework.base.test.jar"/>
+	<classpathentry kind="lib" path="lib/ant.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging.jar"/>
+	<classpathentry kind="lib" path="lib/concurrent.jar"/>
+	<classpathentry kind="lib" path="lib/ejb3-persistence.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate-annotations.jar"/>
+	<classpathentry kind="lib" path="lib/jboss-aop-client.jar"/>
+	<classpathentry kind="lib" path="lib/jboss-appclient.jar"/>
+	<classpathentry kind="lib" path="lib/jboss-aspect-jdk50-client.jar"/>
+	<classpathentry kind="lib" path="lib/jboss-client.jar"/>
+	<classpathentry kind="lib" path="lib/jboss-common-core.jar"/>
+	<classpathentry kind="lib" path="lib/jboss-deployers-client-spi.jar"/>
+	<classpathentry kind="lib" path="lib/jboss-deployers-client.jar"/>
+	<classpathentry kind="lib" path="lib/jboss-deployers-core-spi.jar"/>
+	<classpathentry kind="lib" path="lib/jboss-deployers-core.jar"/>
+	<classpathentry kind="lib" path="lib/jboss-deployment.jar"/>
+	<classpathentry kind="lib" path="lib/jboss-ejb3-common-client.jar"/>
+	<classpathentry kind="lib" path="lib/jboss-ejb3-core-client.jar"/>
+	<classpathentry kind="lib" path="lib/jboss-ejb3-ext-api.jar"/>
+	<classpathentry kind="lib" path="lib/jboss-ejb3-proxy-clustered-client.jar"/>
+	<classpathentry kind="lib" path="lib/jboss-ejb3-proxy-impl-client.jar"/>
+	<classpathentry kind="lib" path="lib/jboss-ejb3-proxy-spi-client.jar"/>
+	<classpathentry kind="lib" path="lib/jboss-ejb3-security-client.jar"/>
+	<classpathentry kind="lib" path="lib/jboss-ha-client.jar"/>
+	<classpathentry kind="lib" path="lib/jboss-ha-legacy-client.jar"/>
+	<classpathentry kind="lib" path="lib/jboss-iiop-client.jar"/>
+	<classpathentry kind="lib" path="lib/jboss-integration.jar"/>
+	<classpathentry kind="lib" path="lib/jboss-j2se.jar"/>
+	<classpathentry kind="lib" path="lib/jboss-javaee.jar"/>
+	<classpathentry kind="lib" path="lib/jboss-jsr77-client.jar"/>
+	<classpathentry kind="lib" path="lib/jboss-logging-jdk.jar"/>
+	<classpathentry kind="lib" path="lib/jboss-logging-log4j.jar"/>
+	<classpathentry kind="lib" path="lib/jboss-logging-spi.jar"/>
+	<classpathentry kind="lib" path="lib/jboss-main-client.jar"/>
+	<classpathentry kind="lib" path="lib/jboss-mdr.jar"/>
+	<classpathentry kind="lib" path="lib/jboss-messaging-client.jar"/>
+	<classpathentry kind="lib" path="lib/jboss-remoting.jar"/>
+	<classpathentry kind="lib" path="lib/jboss-security-spi.jar"/>
+	<classpathentry kind="lib" path="lib/jboss-serialization.jar"/>
+	<classpathentry kind="lib" path="lib/jboss-srp-client.jar"/>
+	<classpathentry kind="lib" path="lib/jboss-system-client.jar"/>
+	<classpathentry kind="lib" path="lib/jboss-system-jmx-client.jar"/>
+	<classpathentry kind="lib" path="lib/jbosscx-client.jar"/>
+	<classpathentry kind="lib" path="lib/jbossjts-integration.jar"/>
+	<classpathentry kind="lib" path="lib/jbossjts.jar"/>
+	<classpathentry kind="lib" path="lib/jbosssx-as-client.jar"/>
+	<classpathentry kind="lib" path="lib/jbosssx-client.jar"/>
+	<classpathentry kind="lib" path="lib/jmx-client.jar"/>
+	<classpathentry kind="lib" path="lib/jmx-invoker-adaptor-client.jar"/>
+	<classpathentry kind="lib" path="lib/jnp-client.jar"/>
+	<classpathentry kind="lib" path="lib/jsf-api.jar"/>
+	<classpathentry kind="lib" path="lib/jsp-api.jar"/>
+	<classpathentry kind="lib" path="lib/log4j.jar"/>
+	<classpathentry kind="lib" path="lib/servlet-api.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-api.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-jboss-logging.jar"/>
+	<classpathentry kind="lib" path="lib/xmlsec.jar"/>
+	<classpathentry kind="output" path="out/ide"/>
+</classpath>
